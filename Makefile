@@ -16,16 +16,7 @@ check: ## Run code quality tools.
 .PHONY: test
 test: ## Test the code with pytest
 	@echo "🚀 Testing code: Running pytest"
-	@pdm run pytest --cov --cov-config=pyproject.toml --cov-report=xml -s
-
-.PHONY: build
-build: clean-build ## Build wheel file
-	@echo "🚀 Creating wheel file"
-	@pdm build
-
-.PHONY: clean-build
-clean-build: ## clean build artifacts
-	@rm -rf dist
+	@pdm run pytest --cov --cov-config=pyproject.toml --cov-report=xml -s -vv --no-header
 
 .PHONY: help
 help:
