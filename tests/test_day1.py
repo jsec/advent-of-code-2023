@@ -1,5 +1,5 @@
 from aoc.puzzles.day1 import puzzle_1, puzzle_2
-from aoc.util.input import get_input
+from aoc.util import get_input
 
 
 def test_puzzle1_sample_data():
@@ -11,7 +11,7 @@ def test_puzzle1_sample_data():
 
 def test_puzzle1():
     data = get_input("day1.txt")
-    print("PUZZLE 1 ANSWER:", puzzle_1(data))
+    print("DAY 1, PUZZLE 1 ANSWER:", puzzle_1(data))
 
 
 def test_puzzle2_sample_data():
@@ -31,8 +31,4 @@ def test_puzzle2_sample_data():
 
 def test_puzzle2():
     data = get_input("day1.txt")
-    print("PUZZLE 2 ANSWER:", puzzle_2(data))
-
-
-if __name__ == "__main":
-    pass
+    print("DAY 1, PUZZLE 2 ANSWER:", puzzle_2(data))
