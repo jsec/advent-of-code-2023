@@ -1,7 +1,10 @@
 from pathlib import Path
 
 
-def get_input(filename: str) -> list[str]:
-    file_path = Path().cwd() / "aoc" / "data" / filename
-    with open(file_path) as file:
+def find_file(filename: str) -> Path:
+    return Path().cwd() / "aoc" / "data" / filename
+
+
+def get_input_array(filename: str) -> list[str]:
+    with open(find_file(filename)) as file:
         return [line.rstrip() for line in file]
