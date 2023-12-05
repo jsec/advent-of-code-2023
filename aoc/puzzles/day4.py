@@ -1,5 +1,6 @@
 import math
 import re
+from collections import deque
 
 
 class CardGame:
@@ -18,8 +19,14 @@ class CardGame:
         return [int(x) for x in sanitized]
 
     def point_total(self) -> int:
-        matched_cards = len(list(filter(lambda x: x in self.winning_cards, self.player_cards)))
-        return int(math.pow(2, matched_cards - 1))
+        return int(math.pow(2, self.matched_card_count() - 1))
+
+    def cards_won(self, idx: int) -> list[int]:
+        count = self.matched_card_count()
+        return [idx + i for i in range(1, count + 1)]
+
+    def matched_card_count(self) -> int:
+        return len(list(filter(lambda x: x in self.winning_cards, self.player_cards)))
 
 
 def puzzle1(data: list[str]) -> int:
@@ -28,4 +35,19 @@ def puzzle1(data: list[str]) -> int:
 
 
 def puzzle2(data: list[str]) -> int:
-    return 4
+    games = [CardGame(line) for line in data]
+
+    result = 0
+    cards = {}
+
+    for idx, game in enumerate(games):
+        cards[idx] = game
+
+    q = deque(cards.keys())
+
+    while q:
+        result += 1
+        card_id = q.popleft()
+        q.extend(cards[card_id].cards_won(card_id))
+
+    return result
