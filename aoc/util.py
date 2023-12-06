@@ -1,3 +1,5 @@
+import re
+from os import remove
 from pathlib import Path
 
 
@@ -13,3 +15,16 @@ def get_input_array(filename: str) -> list[str]:
 def get_split_input(filename: str, delimiter: str) -> list[str]:
     with open(find_file(filename)) as file:
         return file.read().split(delimiter)
+
+
+def get_raw_input(filename: str) -> str:
+    with open(find_file(filename)) as file:
+        return file.read()
+
+
+def remove_extra_spaces(text: str) -> str:
+    return re.sub(" +", " ", text).strip()
+
+
+def string_to_list(text: str) -> list[int]:
+    return list(map(int, remove_extra_spaces(text).split(" ")))
