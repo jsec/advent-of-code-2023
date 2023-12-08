@@ -16,7 +16,7 @@ check: ## Run code quality tools.
 .PHONY: test
 test: ## Test the code with pytest
 	@echo "🚀 Testing code: Running pytest"
-	@pdm run pytest -s -vv --no-header tests/test_day7.py
+	@pdm run pytest -s -vv --no-header tests/test_day8.py
 
 .PHONY: help
 help:
