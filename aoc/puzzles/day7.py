@@ -1,9 +1,10 @@
+import itertools
 from typing import Counter
 
-cards = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+card_list = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
 scores = [13, 12, 11, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-card_score_map = dict(zip(cards, scores))
+card_score_map = dict(zip(card_list, scores))
 
 # Card counts for winning hands
 FiveOfAKind = [5]
@@ -15,36 +16,50 @@ OnePair = [1, 1, 1, 2]
 
 
 class Hand:
-    def __init__(self, data: str) -> None:
-        cards, bid = data.split()
+    def __init__(self, cards: str, bid: int = 0, joker: bool = False) -> None:
         self.cards = list(cards)
         self.bid = int(bid)
-        self.counts = sorted(Counter(self.cards).values())
-        self.strength = self.get_strength(self.cards)
+        self.strength = self.analyze(self.cards, joker)
         self.card_strengths = [card_score_map[card] for card in self.cards]
 
-    def get_strength(self, cards: list[str]) -> int:
-        if self.counts == FiveOfAKind:
+    def analyze(self, cards: list[str], joker: bool) -> int:
+        if not joker:
+            return self.calculate_strength(cards)
+
+        joker_hands = list(self.generate_joker_hands("".join(self.cards)))
+        joker_hands.sort(key=lambda h: (h.strength, h.card_strengths))
+
+        return joker_hands[-1].strength
+
+    def generate_joker_hands(self, card_str: str):
+        for p in map(iter, itertools.product("".join(card_list), repeat=card_str.count("J"))):
+            yield Hand("".join(c if c != "J" else next(p) for c in card_str))
+
+    def calculate_strength(self, cards: list[str]) -> int:
+        counts = sorted(Counter(cards).values())
+        if counts == FiveOfAKind:
             return 70
-        elif self.counts == FourOfAKind:
+        elif counts == FourOfAKind:
             return 60
-        elif self.counts == FullHouse:
+        elif counts == FullHouse:
             return 50
-        elif self.counts == ThreeOfAKind:
+        elif counts == ThreeOfAKind:
             return 40
-        elif self.counts == TwoPair:
+        elif counts == TwoPair:
             return 30
-        elif self.counts == OnePair:
+        elif counts == OnePair:
             return 20
         else:
             return 10
 
 
 def puzzle1(data: list[str]) -> int:
-    hands = [Hand(line) for line in data]
+    hands = [Hand(line.split(" ")[0], int(line.split(" ")[1])) for line in data]
     hands.sort(key=lambda h: (h.strength, h.card_strengths))
     return sum([hand.bid * (idx + 1) for idx, hand in enumerate(hands)])
 
 
 def puzzle2(data: list[str]) -> int:
-    return 4
+    hands = [Hand(line.split(" ")[0], int(line.split(" ")[1]), True) for line in data]
+    hands.sort(key=lambda h: (h.strength, h.card_strengths))
+    return sum([hand.bid * (idx + 1) for idx, hand in enumerate(hands)])
