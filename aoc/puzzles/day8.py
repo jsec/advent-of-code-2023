@@ -23,24 +23,6 @@ class Network:
         return nodes
 
     def traverse(self, start: str, predicate: Callable[[str], bool]) -> int:
-        current_node = start
-        steps = 0
-
-        while True:
-            for direction in self.directions:
-                steps += 1
-                current_node = self.walk_graph(current_node, direction)
-
-                if predicate(current_node):
-                    return steps
-
-    def traverse_multiple(self, start_predicate: Callable[[str], bool], end_predicate: Callable[[str], bool]) -> int:
-        steps = 1
-        start_node = next(filter(start_predicate, self.nodes))
-
-        return math.lcm(steps, self.solve(start_node, end_predicate))
-
-    def solve(self, start: str, predicate: Callable[[str], bool]) -> int:
         current = start
         dir_idx = 0
 
@@ -53,6 +35,16 @@ class Network:
     def walk_graph(self, current: str, direction: str) -> str:
         node = self.nodes[current]
         return node.right if direction == "R" else node.left
+
+    def traverse_multiple(self, start_predicate: Callable[[str], bool], end_predicate: Callable[[str], bool]) -> int:
+        # 1 is the universal common denominator
+        result = 1
+        start_nodes = list(filter(start_predicate, self.nodes))
+
+        for node in start_nodes:
+            result = math.lcm(result, self.traverse(node, end_predicate))
+
+        return result
 
 
 def puzzle1(data: list[str]) -> int:
