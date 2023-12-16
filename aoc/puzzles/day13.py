@@ -1,21 +1,43 @@
 import numpy as np
 
-from aoc.util import get_raw_input
 
-def find_reflections(pattern: list[str]) -> int:
-    matrix = [list(line) for line in pattern]
-    arr = np.array(matrix)
-    # matrix = np.array([list(line) for line in pattern])
-    print(arr)
-    return 4
+def solve(data: list[list[str]]) -> int:
+    arrs = [np.array([list(line) for line in pattern]) for pattern in data]
+    return sum([get_total(arr) for arr in arrs])
 
 
-def run(data: list[list[str]]) -> int:
-    for pattern in data:
-        find_reflections(pattern)
-    return 4
+def get_total(arr: np.ndarray) -> int:
+    refl_idx = find_reflection(arr)
+
+    if refl_idx != -1 and verify_mirror(arr, refl_idx):
+        return (refl_idx + 1) * 100
+
+    transposed = np.rot90(arr)
+    refl_idx = find_reflection(transposed)
+    return len(transposed) - 1 - refl_idx
 
 
-if __name__ == "__main__":
-    data = [pattern.split("\n") for pattern in get_raw_input("13-test.txt").split("\n\n")]
-    run(data)
+def find_reflection(arr: np.ndarray) -> int:
+    for i in range(0, len(arr) - 1):
+        if line_match(arr[i], arr[i + 1]) and verify_mirror(arr, i):
+            return i
+
+    return -1
+
+
+def verify_mirror(arr: np.ndarray, idx: int) -> bool:
+    pre = idx - 1
+    post = idx + 2
+
+    while pre >= 0 and post < len(arr):
+        if not line_match(arr[pre], arr[post]):
+            return False
+
+        pre -= 1
+        post += 1
+
+    return True
+
+
+def line_match(j: list[str], k: list[str]) -> bool:
+    return all(x == y for x, y in zip(j, k))
