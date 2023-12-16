@@ -5,8 +5,10 @@ description = "Advent of Code 2023"
 authors = [{ name = "Jarrod Seccombe", email = "jarrod.seccombe@icloud.com" }]
 readme = "README.md"
 packages = [{ include = "aoc" }]
-requires-python = ">=3.8,<4.0"
-dependencies = []
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "numpy>=1.26.2",
+]
 license = { text = "MIT license" }
 keywords = ['python']
 
