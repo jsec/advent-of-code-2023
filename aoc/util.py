@@ -27,3 +27,7 @@ def remove_extra_spaces(text: str) -> str:
 
 def string_to_list(text: str) -> list[int]:
     return list(map(int, remove_extra_spaces(text).split(" ")))
+
+
+def transpose(arr):
+    return list(zip(*arr))[::-1]

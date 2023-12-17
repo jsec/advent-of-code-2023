@@ -16,8 +16,8 @@ def test_puzzle1_sample():
 
 
 def test_puzzle1():
-    print("DAY 13, PUZZLE 1 ANSWER:", solve(puzzle_data))
+    print("DAY 13, PUZZLE 1 ANSWER:", solve(puzzle_data, 0))
 
 
-# def test_puzzle2():
-#     print("DAY 14, PUZZLE 2 ANSWER:", solve(puzzle_data))
+def test_puzzle2():
+    print("DAY 14, PUZZLE 2 ANSWER:", solve(puzzle_data, 1))
