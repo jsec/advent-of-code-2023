@@ -7,4 +7,4 @@ install: ## Install the environment and install the pre-commit hooks
 .PHONY: test
 test: ## Test the code with pytest
 	@echo "🚀 Testing code: Running pytest"
-	@pdm run pytest -s -vv --no-header tests/test_14.py
+	@pdm run pytest -s -vv --no-header tests/test_16.py

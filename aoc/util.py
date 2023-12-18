@@ -8,7 +8,11 @@ def find_file(filename: str) -> Path:
 
 def get_input_array(filename: str) -> list[str]:
     with open(find_file(filename)) as file:
-        return [line.rstrip() for line in file]
+        return [line.strip() for line in file]
+
+
+def get_input_matrix(filename: str) -> list[list[str]]:
+    return [list(line) for line in get_input_array(filename)]
 
 
 def get_split_input(filename: str, delimiter: str) -> list[str]:
