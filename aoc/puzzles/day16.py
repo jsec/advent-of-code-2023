@@ -60,13 +60,15 @@ class Beam:
 
 
 class Grid:
-    def __init__(self, grid: list[list[str]], start_x: int, start_y: int, heading: str) -> None:
+    def __init__(self, grid: list[list[str]]) -> None:
         self.grid = grid
-        self.energized = set()
-        self.beams = [Beam(start_x, start_y, heading)]
-        self.cache = defaultdict(list)
+        self.beams = []
 
-    def traverse(self):
+    def run(self, start_x: int, start_y: int, heading: str) -> int:
+        self.beams = [Beam(start_x, start_y, heading)]
+        cache = defaultdict(list)
+        energized = set()
+
         max_x = len(self.grid)
         max_y = len(self.grid[0])
 
@@ -76,30 +78,37 @@ class Grid:
                     self.beams.remove(beam)
                     continue
 
-                if [beam.x, beam.y] in self.cache[beam.heading]:
+                if [beam.x, beam.y] in cache[beam.heading]:
                     self.beams.remove(beam)
                 else:
-                    self.cache[beam.heading].append([beam.x, beam.y])
+                    cache[beam.heading].append([beam.x, beam.y])
 
-                self.energized.add((beam.x, beam.y))
+                energized.add((beam.x, beam.y))
 
                 new_beam = beam.move(self.grid[beam.x][beam.y])
                 if new_beam:
                     self.beams.append(new_beam)
 
-    def print_energized(self):
-        acc = ""
-        for x in range(len(self.grid)):
-            for y in range(len(self.grid[0])):
-                acc += "#" if (x, y) in self.energized else "."
-
-            acc += "\n"
-
-        for line in acc.split("\n"):
-            print(line)
+        return len(energized)
 
 
-def solve(matrix: list[list[str]]) -> int:
-    grid = Grid(matrix, 0, 0, "R")
-    grid.traverse()
-    return len(grid.energized)
+def p1(matrix: list[list[str]]) -> int:
+    grid = Grid(matrix)
+    return grid.run(0, 0, "R")
+
+
+def p2(matrix: list[list[str]]) -> int:
+    starts = []
+    max_x = len(matrix) - 1
+    max_y = len(matrix[0]) - 1
+
+    for x in range(max_x + 1):
+        starts.append((x, 0, "R"))
+        starts.append((x, max_y, "L"))
+
+    for y in range(max_y + 1):
+        starts.append((0, y, "D"))
+        starts.append((max_x, y, "U"))
+
+    grid = Grid(matrix)
+    return max([grid.run(x, y, heading) for x, y, heading in starts])
