@@ -35,3 +35,7 @@ def string_to_list(text: str) -> list[int]:
 
 def transpose(arr):
     return list(zip(*arr))[::-1]
+
+
+def range_intersection(x, y):
+    return range(max(x[0], y[0]), min(x[-1], y[-1]) + 1)
