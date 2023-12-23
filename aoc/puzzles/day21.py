@@ -37,24 +37,14 @@ def p1(m: list[str], steps: int) -> int:
 
 
 def p2(m: list[str], steps: int) -> int:
-    max_steps = 26501365
-
     map_size = len(m)
     x, y = find_item_in_matrix(m, "S")
 
-    # print()
     iters, rem = divmod(steps, map_size)
-    # print("size:", s)
-    # print("rem:", rem)
     a, b, c = (walk(m, x, y, map_size * i + rem) for i in range(0, 3))
 
     a1 = (a - 2 * b + c) // 2
     b1 = b - a - a1
     c1 = a
-
-    # print("a:", a)
-    # print("b:", b)
-    # print("c:", c)
-    # print("iters:", iters)
 
     return a1 * iters * iters + b1 * iters + c1
