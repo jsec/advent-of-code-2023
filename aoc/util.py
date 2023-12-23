@@ -1,6 +1,7 @@
 import re
-from collections import abc
 from pathlib import Path
+
+import numpy as np
 
 
 def find_file(filename: str) -> Path:
@@ -57,3 +58,14 @@ def flatten(lists):
             yield from flatten(item)
         except TypeError:
             yield item
+
+
+def shoelace_area(x, y):
+    return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
+
+
+def polygon_area(x, y, path):
+    s = len(path)
+    a = shoelace_area(x, y)
+    i = a + 1 - s // 2
+    return i + s
