@@ -1,4 +1,6 @@
+import itertools
 from collections import deque
+from math import lcm
 
 
 def broadcast(modules, source, dest, cmods, fmods, value):
@@ -38,7 +40,37 @@ def button(modules, fmods, cmods):
     return high_count, low_count
 
 
-def run(data: list[str], count: int) -> int:
+def detect_cycle(modules, fmods, cmods):
+    p = set()
+
+    for rx_s, rx_d in modules.items():
+        if rx_d == ["rx"]:
+            assert rx_s in cmods  # noqa: S101
+            break
+
+    for source, dest in modules.items():
+        if rx_s in dest:
+            assert source in cmods  # noqa: S101
+            p.add(source)
+
+    for i in itertools.count(1):
+        queue: deque[tuple[str, str, bool]] = deque([("press", "broadcaster", False)])
+
+        while queue:
+            source, dest, value = queue.popleft()
+
+            if not value:
+                if dest in p:
+                    yield i
+
+                p.discard(dest)
+                if not p:
+                    return
+
+            queue.extend(broadcast(modules, source, dest, cmods, fmods, value))
+
+
+def run(data: list[str], p2: bool = False) -> int:
     modules = {}
     fmods = {}
     cmods = {}
@@ -61,10 +93,14 @@ def run(data: list[str], count: int) -> int:
         for d in filter(lambda x: x in cmods, r):
             cmods[d][n] = False
 
-    high = low = 0
-    for _ in range(count):
-        dh, dl = button(modules, fmods, cmods)
-        high += dh
-        low += dl
+    # Part 1
+    if not p2:
+        high = low = 0
+        for _ in range(1000):
+            dh, dl = button(modules, fmods, cmods)
+            high += dh
+            low += dl
 
-    return high * low
+        return high * low
+
+    return lcm(*detect_cycle(modules, fmods, cmods))
