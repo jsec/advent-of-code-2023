@@ -9,6 +9,8 @@ requires-python = ">=3.12,<4.0"
 dependencies = [
     "numpy>=1.26.2",
     "networkx[default]>=3.2.1",
+    "sympy>=1.12",
+    "z3-solver>=4.12.4.0",
 ]
 license = { text = "MIT license" }
 keywords = ['python']
