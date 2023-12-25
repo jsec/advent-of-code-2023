@@ -4,11 +4,11 @@ DIRECTIONS = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 slope_map = {"^": (-1, 0), "v": (1, 0), "<": (0, -1), ">": (0, 1)}
 
 
-def find_neighbors(grid, paths, point, visited):
+def find_neighbors(grid, paths, point, visited, p1):
     x, y = point
     char = grid[x][y]
 
-    if char in "<^v>":
+    if p1 and char in "<^v>":
         dx, dy = slope_map[char]
         return [(x + dx, y + dy)]
 
@@ -17,37 +17,35 @@ def find_neighbors(grid, paths, point, visited):
         nx = x + dx
         ny = y + dy
 
-        if (nx, ny) not in paths:
-            continue
-
-        if (nx, ny) in visited:
-            continue
-
         if (nx, ny) not in paths or (nx, ny) in visited:
             continue
 
-        char = grid[nx][ny]
+        if p1:
+            char = grid[nx][ny]
 
-        if char in "<^v>":
-            sx, sy = slope_map[char]
-            if nx + sx == x and ny + sy == y:
-                continue
+            if char in "<^v>":
+                sx, sy = slope_map[char]
+                if nx + sx == x and ny + sy == y:
+                    continue
 
         neighbors.append((nx, ny))
 
     return neighbors
 
 
-def walk(grid, paths, point, current_path, visited) -> int:
+def walk(grid, paths, point, end, current_path, visited, p1) -> int:
     visited.add(point)
     current_path.append(point)
 
-    neighbors = find_neighbors(grid, paths, point, visited)
-
-    if not neighbors:
+    if point == end:
         return len(current_path) - 1
 
-    return max([walk(grid, paths, n, current_path.copy(), visited.copy()) for n in neighbors])
+    neighbors = find_neighbors(grid, paths, point, visited, p1)
+
+    if not neighbors:
+        return 0
+
+    return max([walk(grid, paths, n, end, current_path.copy(), visited.copy(), p1) for n in neighbors])
 
 
 def print_grid(grid, path):
@@ -68,9 +66,10 @@ def print_grid(grid, path):
         print(line)
 
 
-def run(grid):
+def run(grid, p1: bool = True) -> int:
     sys.setrecursionlimit(100000)
     start = (0, grid[0].index("."))
+    end = (len(grid) - 1, grid[-1].index("."))
 
     my = len(grid[0])
     mx = len(grid)
@@ -81,4 +80,4 @@ def run(grid):
             if grid[x][y] != "#":
                 paths.append((x, y))
 
-    return walk(grid, paths, start, [], set())
+    return walk(grid, paths, start, end, [], set(), p1)
