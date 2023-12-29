@@ -1,4 +1,4 @@
-import { getSplitInput } from './util'
+import { getSplitInput } from './util/input'
 
 let cardScores = {
   X: 1,

@@ -1,4 +1,4 @@
-import { getSplitInput } from './util'
+import { getSplitInput } from './util/input'
 
 const elves = getSplitInput('\n\n')
   .map(group => group.trim().split('\n')
