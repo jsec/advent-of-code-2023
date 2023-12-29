@@ -45,24 +45,6 @@ def p1(data, t_min, t_max) -> int:
     return len(list(filter(lambda x: x, results)))
 
 
-# def p2(data):
-#     hail = [Hail(line) for line in data]
-#     x, y, z, vx, vy, vz = z3.Ints("x, y, z, vx, vy, vz")
-#     times = [z3.Int("t" + str(i)) for i in range(len(hail))]
-
-#     s = z3.Solver()
-
-#     for i, h in enumerate(hail):
-#         s.add(x + vx * times[i] == h.x + h.vx * times[i])
-#         s.add(y + vy * times[i] == h.y + h.vy * times[i])
-#         s.add(z + vz * times[i] == h.z + h.vz * times[i])
-
-#     s.check()
-#     result = s.model().evaluate(x + y + z)
-#     print("result:", result)
-#     return result.as_long()
-
-
 def p2(data):
     hail = [Hail(line) for line in data]
     rock_x, rock_y, rock_z, rock_vx, rock_vy, rock_vz = sympy.symbols("rock_x rock_y rock_z rock_vx rock_vy rock_vz")
