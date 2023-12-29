@@ -2,6 +2,7 @@ import itertools
 from dataclasses import dataclass
 
 import numpy as np
+import sympy
 
 
 @dataclass
@@ -42,3 +43,40 @@ def p1(data, t_min, t_max) -> int:
     results = [solve(h1, h2, t_min, t_max) for h1, h2 in itertools.combinations(hail, 2)]
 
     return len(list(filter(lambda x: x, results)))
+
+
+# def p2(data):
+#     hail = [Hail(line) for line in data]
+#     x, y, z, vx, vy, vz = z3.Ints("x, y, z, vx, vy, vz")
+#     times = [z3.Int("t" + str(i)) for i in range(len(hail))]
+
+#     s = z3.Solver()
+
+#     for i, h in enumerate(hail):
+#         s.add(x + vx * times[i] == h.x + h.vx * times[i])
+#         s.add(y + vy * times[i] == h.y + h.vy * times[i])
+#         s.add(z + vz * times[i] == h.z + h.vz * times[i])
+
+#     s.check()
+#     result = s.model().evaluate(x + y + z)
+#     print("result:", result)
+#     return result.as_long()
+
+
+def p2(data):
+    hail = [Hail(line) for line in data]
+    rock_x, rock_y, rock_z, rock_vx, rock_vy, rock_vz = sympy.symbols("rock_x rock_y rock_z rock_vx rock_vy rock_vz")
+    eqs = []
+
+    sample = 10 if len(data) >= 10 else len(data) - 1
+
+    for h in hail[:sample]:
+        eqs.append(sympy.Eq((rock_x - h.x) * (h.vy - rock_vy), (rock_y - h.y) * (h.vx - rock_vx)))
+        eqs.append(sympy.Eq((rock_y - h.y) * (h.vz - rock_vz), (rock_z - h.z) * (h.vy - rock_vy)))
+
+    try:
+        result = sympy.solve(eqs)[0]
+    except sympy.core.sympify.SympifyError as e:
+        print(f"No solutions found: {e}")
+
+    return sum([result[rock_x], result[rock_y], result[rock_z]])

@@ -5,7 +5,7 @@
 groups = ["default", "dev", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:6e3bd09f96cf68299ec6c972c5ddb3755d48242fda7386269c653d34ed432b3d"
+content_hash = "sha256:f9349f191bbe7588b0ba4f37c025d55c3d26d081a7255e9fa64b949e70c9239b"
 
 [[package]]
 name = "cachetools"
