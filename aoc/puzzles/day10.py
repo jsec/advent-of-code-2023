@@ -1,6 +1,8 @@
 import math
 from dataclasses import dataclass
 
+from aoc.util import picks_theorem, polygon_area
+
 move_map = {
     "|": {"U": (-1, 0, "U"), "D": (1, 0, "D")},
     "-": {"L": (0, -1, "L"), "R": (0, 1, "R")},
@@ -33,6 +35,7 @@ class Grid:
     def __init__(self, grid: list[list[str]]) -> None:
         self.grid = grid
         self.start = self.find_animal()
+        self.vertices = []
 
     def find_animal(self):
         for x, line in enumerate(self.grid):
@@ -67,10 +70,32 @@ class Grid:
         while animal.position() != self.start:
             self.path.append(animal.position())
             char = self.grid[animal.x][animal.y]
+            if char in "J7FLS":
+                self.vertices.append((animal.x, animal.y))
             animal.move(char)
+
+    def inner_area(self):
+        area = 0
+
+        for ix, line in enumerate(self.grid):
+            interior = False
+
+            for iy, char in enumerate(line):
+                if (ix, iy) not in self.path:
+                    area += interior
+                else:
+                    interior = interior ^ (char in "|F7S")
+
+        return area
 
 
 def p1(matrix: list[list[str]]) -> int:
     grid = Grid(matrix)
     grid.traverse()
     return math.ceil(len(grid.path) / 2)
+
+
+def p2(matrix: list[list[str]]) -> int:
+    grid = Grid(matrix)
+    grid.traverse()
+    return grid.inner_area()
