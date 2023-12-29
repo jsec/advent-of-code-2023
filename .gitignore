@@ -1,5 +1,6 @@
 docs/source
 2023/aoc/data
+input.txt
 
  Byte-compiled / optimized / DLL files
 __pycache__
