@@ -43,6 +43,35 @@ def make_it_rain(bricks):
     return moved, updated_bricks
 
 
+def part1(bricks) -> int:
+    safe_count = 0
+    for idx in range(len(bricks)):
+        bricks_copy = bricks.copy()
+        del bricks_copy[idx]
+        res, _ = make_it_rain(bricks_copy)
+        if not res:
+            safe_count += 1
+
+    return safe_count
+
+
+def part2(bricks) -> int:
+    collateral_damage = 0
+    for idx in range(len(bricks)):
+        bricks_copy = bricks.copy()
+        del bricks_copy[idx]
+        origin = bricks_copy.copy()
+        bricks_moved = True
+        while bricks_moved:
+            bricks_moved, bricks_copy = make_it_rain(bricks_copy)
+
+        for x, y in zip(bricks_copy, origin):
+            if x != y:
+                collateral_damage += 1
+
+    return collateral_damage
+
+
 def run(data, p1=True) -> int:
     bricks = parse_input(data)
     bricks.sort(key=lambda b: min([b[2], b[5]]))
@@ -52,13 +81,7 @@ def run(data, p1=True) -> int:
     while bricks_moved:
         bricks_moved, bricks = make_it_rain(bricks)
 
-    safe_count = 0
+    if p1:
+        return part1(bricks)
 
-    for idx in range(len(bricks)):
-        bricks_copy = bricks.copy()
-        del bricks_copy[idx]
-        res, _ = make_it_rain(bricks_copy)
-        if not res:
-            safe_count += 1
-
-    return safe_count
+    return part2(bricks)
