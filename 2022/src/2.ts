@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { getSplitInput } from './util'
 
 let cardScores = {
   X: 1,
@@ -24,10 +24,7 @@ let strategyMap = {
   },
 }
 
-const cards = readFileSync('input.txt', 'utf8')
-  .trim()
-  .split('\n')
-  .map(line => line.trim().split(' '))
+const cards = getSplitInput().map(line => line.split(' '))
 
 const calculate = (cards: string[][]) => {
   return cards
