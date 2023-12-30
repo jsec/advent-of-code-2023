@@ -10,3 +10,9 @@ export const sortArray = (arr, asc = true) => {
 
   return arr.sort((a, b) => b - a)
 }
+
+export const zip = (arrays) => {
+  return Array.from({
+    length: Math.max(...arrays.map(a => a.length)),
+  }, (_, i) => arrays.map(a => a[i]))
+}
