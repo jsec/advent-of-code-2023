@@ -1,0 +1,22 @@
+{
+  "name": "aoc-2022",
+  "version": "1.0.0",
+  "description": "Advent of Code 2022",
+  "scripts": {
+    "lint": "eslint --ext .ts . --max-warnings 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsec/advent-of-code"
+  },
+  "keywords": [],
+  "author": "Jarrod Seccombe <jarrod.seccombe@icloud.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@jarsec/eslint-config": "4.2.0",
+    "@jarsec/tsconfig": "2.0.0",
+    "@types/node": "20.10.5",
+    "tsx": "^4.7.0",
+    "typescript": "5.3.3"
+  }
+}
