@@ -21,16 +21,14 @@ const solve = (input, p2 = false) => {
       case 'up':
         if (p2) {
           aim -= length
-        }
-        else {
+        } else {
           depth -= length
         }
         break
       case 'down':
         if (p2) {
           aim += length
-        }
-        else {
+        } else {
           depth += length
         }
         break
