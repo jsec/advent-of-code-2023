@@ -1,29 +1,22 @@
 import { getSplitInput } from './util/input'
 
-const tick = (fishes: number[]): number[] => {
-  const newFishes: number[] = []
+const run = (input: number[], ticks: number): number => {
+  const counts = Array(9).fill(0)
 
-  fishes = fishes.map(fish => {
-    if (fish === 0) {
-      newFishes.push(8)
-      return 6
-    }
-
-    return fish - 1
-  })
-
-  return fishes.concat(newFishes)
-}
-
-const run = (fishes: number[], ticks: number): number[] => {
-  for (let t = 0; t < ticks; t++) {
-    fishes = tick(fishes)
+  for (const i of input) {
+    counts[i] += 1
   }
 
-  return fishes
+  for (let i = 0; i < ticks; i++) {
+    const newFish = counts.shift()
+    counts.push(newFish)
+    counts[6] += newFish
+  }
+
+  return counts.reduce((a, b) => a + b, 0)
 }
 
-const input = getSplitInput(',').map(i => parseInt(i))
+const input = getSplitInput(',').map(f => parseInt(f))
 
-const p1 = run(input, 80).length
-console.log('P1:', p1)
+console.log('P1:', run(input, 80))
+console.log('P2:', run(input, 256))
