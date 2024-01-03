@@ -21,3 +21,11 @@ export const zip = arrays => {
 export const rotate = matrix => {
   return matrix[0].map((_, idx) => matrix.map(row => row[idx]).reverse())
 }
+
+export const flatten = (acc = [], item) => {
+  if (Array.isArray(item)) {
+    return item.reduce(flatten, acc)
+  }
+  acc.push(item)
+  return acc
+}
