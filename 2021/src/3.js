@@ -1,6 +1,6 @@
-import { getInputLines } from './util/input'
+const { getInputLines } = require('./util/input')
 
-const getPower = (readings: string[]) => {
+const getPower = readings => {
   let gamma = ''
   let epsilon = ''
 
@@ -18,7 +18,7 @@ const getPower = (readings: string[]) => {
   }
 }
 
-const getRating = (readings: string[], leastCommon = false) => {
+const getRating = (readings, leastCommon = false) => {
   for (let i = 0; i < readings[0].length; i++) {
     let bit = ''
     const zeroes = readings.filter(r => r[i] === '0').length

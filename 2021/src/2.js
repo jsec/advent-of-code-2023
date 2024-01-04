@@ -1,4 +1,4 @@
-import { getInputLines } from './util/input'
+const { getInputLines } = require('./util/input')
 
 const input = getInputLines().map(l => l.split(' '))
 
@@ -9,7 +9,7 @@ const solve = (input, p2 = false) => {
 
   for (const step of input) {
     const direction = step[0]
-    const length = parseInt(step[1]!)
+    const length = parseInt(step[1])
 
     switch (direction) {
       case 'forward':

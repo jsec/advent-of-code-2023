@@ -1,15 +1,8 @@
-import { rotate } from './util/array'
-import { getInput } from './util/input'
-
-interface Card {
-  called: boolean
-  number: number
-}
+const { rotate } = require('./util/array')
+const { getInput } = require('./util/input')
 
 class Board {
-  private cards: Card[][]
-
-  constructor(input: string) {
+  constructor(input) {
     this.cards = input.split('\n').map(line =>
       line.replace(/\s+/g, ' ').trim().split(' ').map(square => {
         return {
@@ -20,7 +13,7 @@ class Board {
     )
   }
 
-  public checkNumber(called: number): boolean {
+  checkNumber(called) {
     for (let x = 0; x < this.cards.length; x++) {
       const row = this.cards[x]
       for (let y = 0; y < row?.length; y++) {
@@ -34,7 +27,7 @@ class Board {
     return false
   }
 
-  get isWinner(): boolean {
+  get isWinner() {
     // Check if any rows are winners
     const winningRows = this.cards.map(row => row.every(num => num.called)).filter(winner =>
       winner === true
@@ -55,7 +48,7 @@ class Board {
     return false
   }
 
-  get unmarkedSum(): number {
+  get unmarkedSum() {
     let sum = 0
 
     for (const row of this.cards) {
@@ -70,7 +63,7 @@ class Board {
   }
 }
 
-const p1 = (numbers: number[], boards: Board[]): number => {
+const p1 = (numbers, boards) => {
   for (const number of numbers) {
     for (const board of boards) {
       const match = board.checkNumber(number)
@@ -83,7 +76,7 @@ const p1 = (numbers: number[], boards: Board[]): number => {
   return -1
 }
 
-const p2 = (numbers: number[], boards: Board[]): number => {
+const p2 = (numbers, boards) => {
   let lastBoard
 
   for (const number of numbers) {

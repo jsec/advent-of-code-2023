@@ -1,10 +1,10 @@
-export const chunk = (arr, size = 1) =>
+const chunk = (arr, size = 1) =>
   Array.from(
     { length: Math.ceil(arr.length / size) },
     (_, i) => arr.slice(i * size, i * size + size),
   )
 
-export const sortArray = (arr, asc = true) => {
+const sortArray = (arr, asc = true) => {
   if (asc) {
     return arr.sort((a, b) => a - b)
   }
@@ -12,20 +12,28 @@ export const sortArray = (arr, asc = true) => {
   return arr.sort((a, b) => b - a)
 }
 
-export const zip = arrays => {
+const zip = arrays => {
   return Array.from({
     length: Math.max(...arrays.map(a => a.length)),
   }, (_, i) => arrays.map(a => a[i]))
 }
 
-export const rotate = matrix => {
+const rotate = matrix => {
   return matrix[0].map((_, idx) => matrix.map(row => row[idx]).reverse())
 }
 
-export const flatten = (acc = [], item) => {
+const flatten = (acc = [], item) => {
   if (Array.isArray(item)) {
     return item.reduce(flatten, acc)
   }
   acc.push(item)
   return acc
+}
+
+module.exports = {
+  chunk,
+  flatten,
+  rotate,
+  sortArray,
+  zip,
 }

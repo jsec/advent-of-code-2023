@@ -1,4 +1,4 @@
-import { getSplitInput } from './util/input'
+const { getSplitInput } = require('./util/input')
 
 const input = getSplitInput().map(i => parseInt(i))
 
@@ -14,13 +14,13 @@ for (const current of input) {
 
 console.log('P1:', changed)
 
-const slidingWindow = (arr: number[], chunk: number) => {
+const slidingWindow = (arr, chunk) => {
   let previous = 0
   let current = 0
   let count = 0
 
   for (let i = 0; i < chunk; i++) {
-    previous += arr[i]!
+    previous += arr[i]
   }
 
   current = previous

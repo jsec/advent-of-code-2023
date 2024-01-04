@@ -13,10 +13,6 @@
   "author": "Jarrod Seccombe <jarrod.seccombe@icloud.com>",
   "license": "MIT",
   "devDependencies": {
-    "@jarsec/eslint-config": "4.3.0",
-    "@jarsec/tsconfig": "2.0.0",
-    "@types/node": "20.10.5",
-    "tsx": "^4.7.0",
-    "typescript": "5.3.3"
+    "@jarsec/eslint-config": "4.4.0"
   }
 }

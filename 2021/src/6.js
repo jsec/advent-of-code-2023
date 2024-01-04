@@ -1,6 +1,6 @@
-import { getSplitInput } from './util/input'
+const { getSplitInput } = require('./util/input')
 
-const run = (input: number[], ticks: number): number => {
+const run = (input, ticks) => {
   const counts = Array(9).fill(0)
 
   for (const i of input) {
