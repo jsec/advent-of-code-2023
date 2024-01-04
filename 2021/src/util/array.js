@@ -30,8 +30,13 @@ const flatten = (acc = [], item) => {
   return acc
 }
 
+const dedupe = arr => {
+  return Array.from(new Set(arr.map(JSON.stringify)), JSON.parse)
+}
+
 module.exports = {
   chunk,
+  dedupe,
   flatten,
   rotate,
   sortArray,
