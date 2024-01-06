@@ -7,5 +7,5 @@ Some of them have been cleaned up and optimized. Some are ugly and convoluted. I
 ## Year (Language) - Stars Received
 - 2023 (Python) - 50
 - 2022 (TypeScript) - 13
-- 2021 (JavaScript) - 13
+- 2021 (JavaScript) - 14
 - 2020 (Go) - 4
