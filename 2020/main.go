@@ -8,7 +8,6 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	fmt.Println(args)
 	if len(args) == 0 {
 		fmt.Println("No day specified")
 		return
