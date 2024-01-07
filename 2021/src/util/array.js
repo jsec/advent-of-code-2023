@@ -34,10 +34,22 @@ const dedupe = arr => {
   return Array.from(new Set(arr.map(JSON.stringify)), JSON.parse)
 }
 
+const median = arr => {
+  arr.sort((a, b) => a - b)
+  const idx = Math.floor(arr.length / 2)
+
+  if (arr.length % 2 === 0) {
+    return (arr[idx - 1] + arr[idx]) / 2
+  } else {
+    return arr[idx]
+  }
+}
+
 module.exports = {
   chunk,
   dedupe,
   flatten,
+  median,
   rotate,
   sortArray,
   zip,
