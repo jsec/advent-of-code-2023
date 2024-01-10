@@ -9,3 +9,4 @@ Some of them have been cleaned up and optimized. Some are ugly and convoluted. I
 - 2022 (TypeScript) - 13
 - 2021 (JavaScript) - 16
 - 2020 (Go) - 6
+- 2019 (TypeScript: FP) - 0
