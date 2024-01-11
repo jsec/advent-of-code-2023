@@ -1,17 +1,20 @@
-import { A, S, pipe } from '@mobily/ts-belt'
+import { A, R, S, pipe } from '@mobily/ts-belt'
 import { readFileSync } from 'fs'
 
-export const getRawInput = () => readFileSync('input.txt', 'utf8')
+export const getRawInput = () =>
+  R.fromExecution(() => readFileSync('input.txt', 'utf8'))
 
 export const getInput = () => pipe(
   getRawInput(),
-  S.trim
+  R.map(S.trim)
 )
 
-export const getSplitInput = (delimiter = '\n') =>
-  A.initOrEmpty(getInput().split(delimiter))
+export const getSplitInput = (delimiter = '\n') => pipe(
+  getInput(),
+  R.map(S.split(delimiter))
+)
 
 export const getInputLines = () => pipe(
   getSplitInput(),
-  A.map(l => l.trim())
+  R.map(A.map(l => l.trim()))
 )
