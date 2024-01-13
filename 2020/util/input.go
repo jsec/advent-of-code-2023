@@ -14,6 +14,10 @@ func GetInput() string {
 	return strings.TrimSpace(string(input))
 }
 
+func SplitInput(delim string) []string {
+	return strings.Split(GetInput(), delim)
+}
+
 func GetInputLines() []string {
-	return strings.Split(GetInput(), "\n")
+	return SplitInput("\n")
 }
