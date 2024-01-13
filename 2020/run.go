@@ -12,6 +12,8 @@ func Run(day int) {
 		aoc.Day2()
 	case 3:
 		aoc.Day3()
+	case 4:
+		aoc.Day4()
 	case 5:
 		aoc.Day5()
 	case 6:

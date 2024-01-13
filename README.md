@@ -8,6 +8,6 @@ Some of them have been cleaned up and optimized. Some are ugly and convoluted. I
 - 2023 (Python) - 50
 - 2022 (TypeScript) - 13
 - 2021 (JavaScript) - 18
-- 2020 (Go) - 8
+- 2020 (Go) - 11
 - 2019 (TypeScript: FP) - 0
 - 2017 (Python) - 8
