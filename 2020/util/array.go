@@ -29,3 +29,13 @@ func StringsToInts(a []string) []int {
 		return value
 	})
 }
+
+func RangeSlice(n int) []int {
+	slice := make([]int, n)
+
+	for i := 0; i < n; i++ {
+		slice[i] = i
+	}
+
+	return slice
+}
