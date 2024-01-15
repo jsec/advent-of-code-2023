@@ -1,0 +1,18 @@
+{
+  "name": "aoc-2018",
+  "version": "1.0.0",
+  "description": "Advent of Code 2018",
+  "scripts": {
+    "lint": "eslint --ext .ts . --max-warnings 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsec/advent-of-code"
+  },
+  "keywords": [],
+  "author": "Jarrod Seccombe <jarrod.seccombe@icloud.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@jarsec/eslint-config": "4.4.0"
+  }
+}
