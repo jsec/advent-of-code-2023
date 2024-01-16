@@ -10,6 +10,6 @@ Some of them have been cleaned up and optimized. Some are ugly and convoluted. I
 - 2021 (JavaScript) - 18
 - 2020 (Go) - 11
 - 2019 (TypeScript: FP) - 1
-- 2018 (JavaScript) - 2
+- 2018 (JavaScript) - 4
 - 2017 (Python) - 8
 - 2015 (Go) - 4
