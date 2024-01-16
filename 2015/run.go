@@ -8,5 +8,7 @@ func Run(day int) {
 	switch day {
 	case 1:
 		aoc.Day1()
+	case 2:
+		aoc.Day2()
 	}
 }
