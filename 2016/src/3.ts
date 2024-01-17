@@ -16,3 +16,6 @@ const p1 = input
   .length
 
 console.log('P1:', p1)
+
+// PART 2
+// Zip the arrays, then chunk each zip by three and send it through the same logic
