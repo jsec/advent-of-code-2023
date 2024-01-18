@@ -1,5 +1,7 @@
-import { permutations } from './util/array'
+import { chunk, permutations, zip } from './util/array'
 import { getInputLines } from './util/input'
+
+const isValid = (arr: number[]): boolean => permutations(arr).every(a => a[0]! + a[1]! > a[2]!)
 
 const input = getInputLines()
   .map(l => l
@@ -8,14 +10,14 @@ const input = getInputLines()
     .map(n => parseInt(n)))
 
 const p1 = input
-  .map((arr) => {
-    const p = permutations(arr)
-    return p.every(a => a[0]! + a[1]! > a[2]!)
-  })
-  .filter(r => r === true)
+  .filter(isValid)
   .length
 
-console.log('P1:', p1)
+const p2 = zip(...input)
+  .map(i => chunk(i, 3)
+    .filter(isValid)
+    .length
+  ).reduce((a, c) => a + c, 0)
 
-// PART 2
-// Zip the arrays, then chunk each zip by three and send it through the same logic
+console.log('P1:', p1)
+console.log('P2:', p2)

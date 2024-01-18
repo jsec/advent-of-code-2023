@@ -42,3 +42,9 @@ export const zip = (...arrays) => {
     return Array.from({ length: arrays.length }, (_, k) => arrays[k][i])
   })
 }
+
+export const chunk = <T>(arr: T[], size = 1) =>
+  Array.from(
+    { length: Math.ceil(arr.length / size) },
+    (_, i) => arr.slice(i * size, i * size + size),
+  )
