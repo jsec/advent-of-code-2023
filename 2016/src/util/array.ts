@@ -48,3 +48,7 @@ export const chunk = <T>(arr: T[], size = 1) =>
     { length: Math.ceil(arr.length / size) },
     (_, i) => arr.slice(i * size, i * size + size),
   )
+
+export const rotate = (arr) => {
+  return arr[0].map((_, idx) => arr.map(row => row[idx]).reverse())
+}
