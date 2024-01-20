@@ -52,3 +52,5 @@ export const chunk = <T>(arr: T[], size = 1) =>
 export const rotate = (arr) => {
   return arr[0].map((_, idx) => arr.map(row => row[idx]).reverse())
 }
+
+export const transpose = matrix => matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]))

@@ -1,4 +1,4 @@
-import { rotate } from './util/array'
+import { rotate, transpose } from './util/array'
 import { Grid } from './util/grid'
 import { getInputLines } from './util/input'
 
@@ -47,26 +47,24 @@ const p1 = (commands: Command[]): number => {
         }
         break
       case 'rotate':
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        if (cmd.axis === 'column') {
-          grid.rows = rotate(grid.rows)
+        switch (cmd.axis) {
+          case 'row':
+            grid.shiftRow(cmd.index, cmd.length)
+            break
+          case 'column':
+            grid.shiftCol(cmd.index, cmd.length)
+          default:
+            break
         }
-        for (let x = 0; x < cmd.length; x++) {
-          const char = grid.rows[cmd.index]?.pop()
-          grid.rows[cmd.index].unshift(char)
-        }
-        if (cmd.axis === 'column') {
-          grid.rows = rotate(grid.rows)
-        }
-        break
     }
+
+    console.log()
+    console.log('cmd:', cmd)
+    console.log('---------------------------------------------')
+    grid.print()
   }
 
-  grid.print()
-
-  return grid.rows
-    .map(r => r.filter(c => c === '#').length)
-    .reduce((a, c) => a + c, 0)
+  return grid.count('#')
 }
 
 const commands = getInputLines().map(parse)
