@@ -12,5 +12,5 @@ Some of them have been cleaned up and optimized. Some are ugly and convoluted. I
 - 2019 (TypeScript: FP) - 1
 - 2018 (JavaScript) - 4
 - 2017 (Python) - 8
-- 2016 (TypeScript) - 10
+- 2016 (TypeScript) - 17
 - 2015 (Go) - 8
