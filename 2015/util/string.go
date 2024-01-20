@@ -1,6 +1,9 @@
 package util
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 func Dedupe(input string) string {
 	unique := []string{}
@@ -24,4 +27,9 @@ func Contains(strs []string, str string) bool {
 		}
 	}
 	return false
+}
+
+func RegexMatch(s string, re string) bool {
+	match, _ := regexp.MatchString(s, re)
+	return match
 }
