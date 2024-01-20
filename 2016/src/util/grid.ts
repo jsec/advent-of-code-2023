@@ -1,10 +1,15 @@
 export class Grid<T> {
+  public height: number
   public rows: T[][] = []
+  public width: number
 
   constructor(x: number, y: number, value: T) {
     this.rows = Array.from({ length: x }, () => (
       Array.from({ length: y }, () => value)
     ))
+
+    this.height = x
+    this.width = y
   }
 
   count(value: T): number {
@@ -23,8 +28,16 @@ export class Grid<T> {
     this.rows[x][y] = value
   }
 
-  shiftCol(idx: number, by: number) {
-    by = by % this.rows.length
+  setRect(w: number, h: number, value: T): void {
+    for (let x = 0; x < h; x++) {
+      for (let y = 0; y < w; y++) {
+        this.set(x, y, value)
+      }
+    }
+  }
+
+  shiftColumn(idx: number, by: number) {
+    by = by % this.height
     let temp: T[] = []
 
     this.rows.forEach((r) => {
@@ -38,7 +51,7 @@ export class Grid<T> {
   }
 
   shiftRow(idx: number, by: number): void {
-    by = by % this.rows[0]!.length
+    by = by % this.width
 
     this.rows[idx] = this.rows[idx]!.slice(-by).concat(this.rows[idx]!.slice(0, -by))
   }
