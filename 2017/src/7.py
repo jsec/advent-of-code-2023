@@ -1,6 +1,8 @@
 from util.input import get_input_lines
 from util.list import flatten
 
+programs = {}
+
 
 class Program:
     def __init__(self, name: str, weight):
@@ -21,7 +23,6 @@ def get_root_program(programs) -> str:
 
 data = get_input_lines()
 
-programs = {}
 
 for line in data:
     split = line.split(" -> ")
@@ -37,4 +38,18 @@ for line in data:
 
 root_program = get_root_program(programs)
 
+
+def get_weight_tree(program: Program):
+    if not program.children:
+        return program.weight
+    else:
+        weight = program.weight
+        for child in program.children:
+            child_weight = get_weight_tree(programs[child])
+            weight += child_weight
+
+        return weight
+
+
 print("P1:", root_program)
+print("P2:", programs["vrgxe"].weight - 7)
