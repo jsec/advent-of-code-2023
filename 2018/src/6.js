@@ -57,7 +57,25 @@ const p1 = (points, grid) => {
   return Math.max(...interiorSizes)
 }
 
+const p2 = (points, grid) => {
+  let size = 0
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+      const totalDistance = points
+        .map(i => manhattanDist(x, y, i[1], i[0]))
+        .reduce((a, c) => a + c, 0)
+
+      if (totalDistance < 10000) {
+        size += 1
+      }
+    }
+  }
+
+  return size
+}
+
 const points = getInputLines().map(l => l.split(', ').map(i => parseInt(i, 10)))
 const grid = generateGrid(points)
 
 console.log('P1:', p1(points, grid))
+console.log('P2:', p2(points, grid))
