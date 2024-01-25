@@ -4,6 +4,8 @@ const chunk = (arr, size = 1) =>
     (_, i) => arr.slice(i * size, i * size + size),
   )
 
+const createGrid = (rows, cols) => Array.from(Array(rows), _ => Array(cols).fill('-'))
+
 const sortArray = (arr, asc = true) => {
   if (asc) {
     return arr.sort((a, b) => a - b)
@@ -47,6 +49,7 @@ const median = arr => {
 
 module.exports = {
   chunk,
+  createGrid,
   dedupe,
   flatten,
   median,
