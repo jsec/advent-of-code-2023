@@ -24,6 +24,8 @@ const rotate = matrix => {
   return matrix[0].map((_, idx) => matrix.map(row => row[idx]).reverse())
 }
 
+const itemCount = (arr, value) => arr.filter(x => x === value).length
+
 const flatten = (acc = [], item) => {
   if (Array.isArray(item)) {
     return item.reduce(flatten, acc)
@@ -52,6 +54,7 @@ module.exports = {
   createGrid,
   dedupe,
   flatten,
+  itemCount,
   median,
   rotate,
   sortArray,
