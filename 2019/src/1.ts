@@ -1,19 +1,36 @@
-import { A, F, N, R, pipe } from '@mobily/ts-belt'
+import { sum } from 'radash'
+import { map, pipe } from 'remeda'
 
 import { getInputLines } from './util/input'
 
-const getFuel = (mass: string) => pipe(
-  parseInt(mass),
-  N.divide(3),
-  Math.floor,
-  N.subtract(2)
-)
+const calculateFuel = (mass: number, p2 = false) => {
+  if (!p2) {
+    return Math.floor(mass / 3) - 2
+  }
 
-const input = R.getWithDefault(getInputLines(), [])
+  const result = []
+  while (mass > 0) {
+    result.push(mass)
+    mass = calculateFuel(mass)
+  }
 
-pipe(
+  // slice the original mass off the array before summing
+  return sum(result.slice(1))
+}
+
+const input = getInputLines().map((l: string) => parseInt(l))
+
+const p1 = pipe(
   input,
-  A.map(getFuel),
-  A.reduce(0, (a, c) => a + c),
-  F.tap(ans => console.log('P1:', ans))
+  map(calculateFuel),
+  sum
 )
+
+const p2 = pipe(
+  input,
+  map(s => calculateFuel(s, true)),
+  sum
+)
+
+console.log('P1:', p1)
+console.log('P2:', p2)

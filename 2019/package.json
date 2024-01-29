@@ -1,7 +1,7 @@
 {
-  "name": "aoc-2022",
+  "name": "aoc-2019",
   "version": "1.0.0",
-  "description": "Advent of Code 2022",
+  "description": "Advent of Code 2019",
   "scripts": {
     "lint": "eslint --ext .ts . --max-warnings 0"
   },
@@ -16,10 +16,10 @@
     "@jarsec/eslint-config": "4.2.0",
     "@jarsec/tsconfig": "2.0.0",
     "@types/node": "20.10.5",
-    "tsx": "^4.7.0",
+    "tsx": "4.7.0",
     "typescript": "5.3.3"
   },
   "dependencies": {
-    "@mobily/ts-belt": "^3.13.1"
+    "remeda": "1.39.0"
   }
 }
