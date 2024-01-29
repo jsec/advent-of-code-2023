@@ -1,14 +1,14 @@
 import { getInput } from './util/input'
 
-const decompress = (line: string): number => {
+const p1 = (input: string): number => {
   let i = 0
 
-  while (i < line.length) {
-    const substr = line.substring(i)
+  while (i < input.length) {
+    const substr = input.substring(i)
     const start = substr.indexOf('(')
 
     if (start === -1) {
-      return line.length
+      return input.length
     }
 
     const end = substr.substring(start).indexOf(')') + start
@@ -19,15 +19,47 @@ const decompress = (line: string): number => {
       .map(n => parseInt(n))
 
     let decompressed = substr.slice(end + 1, end + 1 + chars!)
-    if (repeats > 1) {
-      decompressed = decompressed.repeat(repeats)
+    if (repeats! > 1) {
+      decompressed = decompressed.repeat(repeats!)
     }
 
-    line = line.slice(0, i + start) + decompressed + line.slice(i + end + 1 + chars)
+    input = input.slice(0, i + start) + decompressed + input.slice(i + end + 1 + chars!)
     i += decompressed.length
   }
 
-  return line.length
+  return input.length
 }
 
-console.log('P1:', decompress(getInput()))
+const p2 = (input: string): number => {
+  let length = 0
+  let i = 0
+  const weights = new Array(input.length).fill(1)
+
+  while (i < input.length) {
+    if (input[i] !== '(') {
+      length += weights[i]
+      i++
+      continue
+    }
+
+    const markEnd = i + input.slice(i).indexOf(')')
+    const [chars, repeats] = input
+      .substring(i, markEnd)
+      .slice(1)
+      .split('x')
+      .map(n => parseInt(n))
+
+    for (let x = 1; x <= chars!; x++) {
+      weights[markEnd + x] += repeats!
+    }
+
+    i = markEnd + 1
+  }
+
+  return length
+}
+
+const input = getInput()
+
+console.log('P1:', p1(input))
+console.log('P2:', p2(input))
