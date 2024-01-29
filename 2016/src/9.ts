@@ -50,7 +50,7 @@ const p2 = (input: string): number => {
       .map(n => parseInt(n))
 
     for (let x = 1; x <= chars!; x++) {
-      weights[markEnd + x] += repeats!
+      weights[markEnd + x] *= repeats!
     }
 
     i = markEnd + 1
