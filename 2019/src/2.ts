@@ -1,5 +1,5 @@
 import fastCartesian from 'fast-cartesian'
-import { chunk, flatMap, identity, map, pipe, range } from 'remeda'
+import { chunk, identity, map, pipe, range } from 'remeda'
 
 import { getSplitInput } from './util/input'
 
