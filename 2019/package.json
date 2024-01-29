@@ -20,6 +20,7 @@
     "typescript": "5.3.3"
   },
   "dependencies": {
+    "fast-cartesian": "^9.0.0",
     "remeda": "1.39.0"
   }
 }
