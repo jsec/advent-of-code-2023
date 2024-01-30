@@ -7,7 +7,7 @@ export const getInput = () => getRawInput().trim()
 
 export const getSplitInput = (delimiter = '\n') => getInput().split(delimiter)
 
-export const getInputLines = () => pipe(
+export const getInputLines = (): string[] => pipe(
   getSplitInput(),
   map(s => s.trim())
 )

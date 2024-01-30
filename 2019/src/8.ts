@@ -1,4 +1,4 @@
-import { chunk, countBy, findIndex, map, minBy, pipe, tap } from 'remeda'
+import { chunk, countBy, findIndex, map, minBy, pipe } from 'remeda'
 
 import { zip } from './util/array'
 import { getInput } from './util/input'
