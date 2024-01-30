@@ -1,18 +1,10 @@
-import { chunk, countBy, findIndex, isDefined, join, map, minBy, pipe, tap } from 'remeda'
+import { chunk, countBy, findIndex, map, minBy, pipe, tap } from 'remeda'
 
 import { zip } from './util/array'
 import { getInput } from './util/input'
 
 const width = 25
 const height = 6
-/* const width = 2
-const height = 2 */
-
-/* const input = pipe(
-  '0222112222120000',
-  str => str.split(''),
-  chunk(width * height)
-) */
 
 const input = pipe(
   getInput(),
@@ -44,7 +36,6 @@ const p2 = pipe(
     return white! < black! ? '0' : ' '
   }),
   chunk(width),
-  tap(console.log),
   map(x => x.join(''))
 )
 
