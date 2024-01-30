@@ -7,3 +7,9 @@ export const pairwise = <T>(arr: T[]): T[][] => {
 
   return ret
 }
+
+export const zip = <T>(arrays: T[][]) => {
+  return Array.from({
+    length: Math.max(...arrays.map(a => a.length)),
+  }, (_, i) => arrays.map(a => a[i]))
+}
