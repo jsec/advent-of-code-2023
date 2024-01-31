@@ -54,3 +54,14 @@ export const rotate = (arr) => {
 }
 
 export const transpose = matrix => matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]))
+
+function* windowGenerator<T>(arr: T[], size: number) {
+  for (let i = 0; i+size <= arr.length; i++) {
+    yield arr.slice(i, i+size)
+  }
+}
+
+
+export const slidingWindow = <T>(arr: T[], size: number): T[][] => {
+  return Array.from(windowGenerator(arr, size))
+}
