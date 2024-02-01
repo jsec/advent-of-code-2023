@@ -1,53 +1,41 @@
 import fastCartesian from 'fast-cartesian'
-import { chunk, identity, map, pipe, range } from 'remeda'
+import { identity, map, pipe, range } from 'remeda'
 
+import { Intcode } from './shared/intcode'
 import { getSplitInput } from './util/input'
 
-const run = (data: number[]): number => {
-  const chunks = chunk(data, 4)
+const p1 = (memory: number[]): number => {
+  const cpu = new Intcode(memory)
 
-  for (const chunk of chunks) {
-    const [opcode, pos1, pos2, pos3] = chunk
+  cpu.setMemoryIndex(1, 12)
+  cpu.setMemoryIndex(2, 2)
 
-    switch (opcode) {
-      case 1:
-        data[pos3!] = data[pos1!] + data[pos2!]
-        break
-      case 2:
-        data[pos3!] = data[pos1!] * data[pos2!]
-        break
-      case 99:
-        return data[0]!
-    }
-  }
+  cpu.run()
 
-  throw new Error('you dun goofed')
+  return cpu.getMemoryAtIndex(0)
 }
 
-const p1 = (data: number[]): number => {
-  data[1] = 12
-  data[2] = 2
+const p2 = (memory: number[]): number => {
+  const cpu = new Intcode(memory)
 
-  return run(data)
-}
-
-const p2 = (data: number[]): number => {
   const permutations = pipe(
     identity([range(0, 100), range(0, 100)]),
     fastCartesian,
   )
 
   for (const [noun, verb] of permutations) {
-    const memory = [...data]
-    memory[1] = noun!
-    memory[2] = verb!
+    cpu.setMemory([...memory])
+    cpu.setMemoryIndex(1, noun!)
+    cpu.setMemoryIndex(2, verb!)
 
-    if (run(memory) === 19690720) {
+    cpu.run()
+
+    if (cpu.getMemoryAtIndex(0) === 19690720) {
       return 100 * noun! + verb!
     }
   }
 
-  throw new Error('you dun goofed')
+  throw new Error('you got it wrong')
 }
 
 const data = pipe(
