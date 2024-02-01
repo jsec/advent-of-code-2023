@@ -13,7 +13,7 @@ const isValid = (password: string, p2 = false): boolean => {
       return false
     }
 
-    if (first === second) {
+    if (!p2 && first === second) {
       hasRepeating = true
     }
   }
