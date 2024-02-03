@@ -20,20 +20,28 @@ def run(steps: list[str], p2=False):
 
         for x in range(x1, x2 + 1):
             for y in range(y1, y2 + 1):
-                if "toggle" in split:
-                    arr[x][y] = 1 if arr[x][y] == 0 else 0
-                elif "on" in split:
-                    arr[x][y] = 1
+                if p2:
+                    if "toggle" in split:
+                        grid[x][y] += 2
+                    elif "on" in split:
+                        grid[x][y] += 1
+                    else:
+                        grid[x][y] = grid[x][y] - 1 if grid[x][y] > 0 else 0
                 else:
-                    arr[x][y] = 0
+                    if "toggle" in split:
+                        grid[x][y] = 1 if grid[x][y] == 0 else 0
+                    elif "on" in split:
+                        grid[x][y] = 1
+                    else:
+                        grid[x][y] = 0
 
     return grid
 
 
-arr = np.full((1000, 1000), False)
 steps = get_input_lines()
 
 p1 = np.count_nonzero(run(steps))
+p2 = np.sum(run(steps, p2=True))
 
-result = np.count_nonzero(arr)
-print("result:", result)
+print("P1:", p1)
+print("P2:", p2)
