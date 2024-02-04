@@ -30,11 +30,34 @@ def parse(lines):
     return sues
 
 
+def p1(item: str, quantity: int):
+    return lambda sue: item not in sue or sue[item] == quantity
+
+
+def p2(item: str, quantity: int):
+    if item in ["cats", "trees"]:
+        return lambda sue: item not in sue or sue[item] > quantity
+    elif item in ["pomeranians", "goldfish"]:
+        return lambda sue: item not in sue or sue[item] < quantity
+    else:
+        return lambda sue: item not in sue or sue[item] == quantity
+
+
+def run(sues: list[dict], part2=False):
+    for item, quantity in ticker:
+        if part2:
+            sues = list(filter(p2(item, quantity), sues))
+        else:
+            sues = list(filter(p1(item, quantity), sues))
+
+        if len(sues) == 1:
+            break
+
+    return sues[0]["name"]
+
+
 sues = parse(get_input_lines())
+sues_copy = sues.copy()
 
-for item, quantity in ticker:
-    sues = list(filter(lambda sue: item not in sue or sue[item] == quantity, sues))
-    if len(sues) == 1:
-        break
-
-print("P1:", sues[0]["name"])
+print("P1:", run(sues))
+print("P2:", run(sues_copy, part2=True))
