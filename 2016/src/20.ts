@@ -14,21 +14,7 @@ const ranges: Range[] = getInputLines()
     min: s[0]!, 
   }))
 
-const p1 = (ranges: Range[]) => {
-  let i = 0
-
-  while (true) {
-    const blacklists = ranges.filter(r => i >= r.min && i <= r.max)
-
-    if (blacklists.length == 0) {
-      return i
-    }
-
-    i = Math.max(...blacklists.map(b => b.max)) + 1
-  }
-}
-
-const p2 = (ranges: Range[]) => {
+const run = (ranges: Range[], p2 = false) => {
   let i = 0
   let count = 0
 
@@ -37,6 +23,10 @@ const p2 = (ranges: Range[]) => {
     const blacklists = ranges.filter(r => i >= r.min && i <= r.max)
 
     if (blacklists.length == 0) {
+      if (!p2) {
+        return i
+      }
+
       count++
       i++
       continue
@@ -48,5 +38,5 @@ const p2 = (ranges: Range[]) => {
   return count
 }
 
-console.log('P1:', p1(ranges))
-console.log('P2:', p2(ranges))
+console.log('P1:', run(ranges))
+console.log('P2:', run(ranges, true))
