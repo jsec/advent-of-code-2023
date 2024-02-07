@@ -30,7 +30,7 @@ const p1 = map => {
   const keys = Object.keys(map)
 
   while (seen.length !== keys.length) {
-    const available = Object.keys(map).filter(key =>
+    const available = keys.filter(key =>
       !seen.includes(key) && map[key].every(d => seen.includes(d))
     )
 
