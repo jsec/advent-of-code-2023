@@ -4,7 +4,8 @@ const chunk = (arr, size = 1) =>
     (_, i) => arr.slice(i * size, i * size + size),
   )
 
-const createGrid = (rows, cols) => Array.from(Array(rows), _ => Array(cols).fill('-'))
+const createGrid = (rows, cols, fillChar = '-') =>
+  Array.from(Array(rows), _ => Array(cols).fill(fillChar))
 
 const sortArray = (arr, asc = true) => {
   if (asc) {
