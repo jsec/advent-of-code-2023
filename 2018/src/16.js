@@ -1,4 +1,4 @@
-const { getInput, getInputLines } = require('./util/input')
+const { getInput } = require('./util/input')
 
 const ops = {
   addi: (regs, a, b, c) => regs[c] = regs[a] + b,
@@ -32,9 +32,11 @@ const run = (initial, instruction, expected) => {
 }
 
 const getInstructions = () => {
-  const [p1, ...rest] = getInput().split('\n\n\n')
+  const [groups, programInput] = getInput().split('\n\n\n\n')
 
-  const instructions = p1.split('\n\n').map(sample => {
+  const program = programInput.split('\n').map(line => line.split(' ').map(i => parseInt(i)))
+
+  const instructions = groups.split('\n\n').map(sample => {
     const [before, op, after] = sample.split('\n')
 
     const initial = before
@@ -44,7 +46,6 @@ const getInstructions = () => {
 
     const instruction = op
       .split(' ')
-      .slice(1)
       .map(n => parseInt(n))
 
     const expected = after
@@ -59,12 +60,61 @@ const getInstructions = () => {
     }
   })
 
-  return instructions
+  return {
+    instructions,
+    program,
+  }
 }
 
-const p1 =
-  getInstructions().filter(({ expected, initial, instruction }) =>
-    run(initial, instruction, expected).length >= 3
-  ).length
+const getOpcodeMapping = instructions => {
+  const map = new Map()
 
+  while (map.size < 16) {
+    const solved = instructions.filter(i => i.candidates.length === 1)
+
+    for (const s of solved) {
+      if (!map.has(s.opcode)) {
+        map.set(s.opcode, s.candidates[0])
+      }
+
+      instructions = instructions
+        .filter(i => i.opcode !== s.opcode)
+        .map(i => {
+          return {
+            ...i,
+            candidates: i.candidates.filter(c => c !== s.candidates[0]),
+          }
+        })
+    }
+  }
+
+  return map
+}
+
+const runProgram = (program, opMap) => {
+  let registers = [0, 0, 0, 0]
+
+  for (const inst of program) {
+    const [op, ...params] = inst
+    registers = compute(registers, opMap.get(op), params)
+  }
+
+  return registers
+}
+
+const { instructions, program } = getInstructions()
+
+const possibilities = instructions.map(({ expected, initial, instruction }) => {
+  const candidates = run(initial, instruction.slice(1), expected)
+  return {
+    candidates,
+    opcode: instruction[0],
+  }
+})
+
+const p1 = possibilities.filter(p => p.candidates.length >= 3).length
 console.log('P1:', p1)
+
+const opcodeMap = getOpcodeMapping(possibilities)
+const p2 = runProgram(program, opcodeMap)
+console.log('P2:', p2[0])
