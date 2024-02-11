@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   dayjs:
-    specifier: ^1.11.10
+    specifier: 1.11.10
     version: 1.11.10
 
 devDependencies:

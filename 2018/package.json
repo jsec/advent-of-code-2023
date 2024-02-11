@@ -16,6 +16,6 @@
     "@jarsec/eslint-config": "4.4.0"
   },
   "dependencies": {
-    "dayjs": "^1.11.10"
+    "dayjs": "1.11.10"
   }
 }
