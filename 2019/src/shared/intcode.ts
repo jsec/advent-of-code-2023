@@ -16,7 +16,7 @@ export class Intcode {
     this._memory[dest] = this._memory[source1]! + this._memory[source2]!
   }
 
-  getMemoryAtIndex(idx: number): number {
+  index(idx: number): number {
     return this._memory[idx]!
   }
 
@@ -53,11 +53,11 @@ export class Intcode {
     }
   }
 
-  setMemory(memory: number[]): void {
+  set(memory: number[]): void {
     this._memory = memory
   }
 
-  setMemoryIndex(idx: number, value: number): void {
+  setIndex(idx: number, value: number): void {
     this._memory[idx] = value
   }
 

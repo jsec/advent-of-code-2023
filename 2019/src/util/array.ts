@@ -13,3 +13,15 @@ export const zip = <T>(arrays: T[][]) => {
     length: Math.max(...arrays.map(a => a.length)),
   }, (_, i) => arrays.map(a => a[i]))
 }
+
+export const cartesian = <T>(...arrs: T[][]): T[][] => {
+  return arrs.reduce<T[][]>(
+    (results, entries) =>
+      results
+        .map(result => entries.map(entry => [...result, entry]))
+        .reduce((subResults, result) => [...subResults, ...result], []),
+    [[]]
+  )
+}
+
+export const sum = (arr: number[]): number => arr.reduce((a, c) => a + c, 0)

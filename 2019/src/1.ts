@@ -1,6 +1,6 @@
-import { sum } from 'radash'
 import { map, pipe } from 'remeda'
 
+import { sum } from './util/array'
 import { getInputLines } from './util/input'
 
 const calculateFuel = (mass: number, p2 = false) => {
@@ -14,11 +14,10 @@ const calculateFuel = (mass: number, p2 = false) => {
     mass = calculateFuel(mass)
   }
 
-  // slice the original mass off the array before summing
   return sum(result.slice(1))
 }
 
-const input = getInputLines().map((l: string) => parseInt(l))
+const input = getInputLines().map(l => parseInt(l))
 
 const p1 = pipe(
   input,
