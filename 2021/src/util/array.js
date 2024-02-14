@@ -34,6 +34,8 @@ const dedupe = arr => {
   return Array.from(new Set(arr.map(JSON.stringify)), JSON.parse)
 }
 
+const pairwise = a => a.slice(1).map((k, i) => [a[i], k])
+
 const median = arr => {
   arr.sort((a, b) => a - b)
   const idx = Math.floor(arr.length / 2)
@@ -50,6 +52,7 @@ module.exports = {
   dedupe,
   flatten,
   median,
+  pairwise,
   rotate,
   sortArray,
   zip,
