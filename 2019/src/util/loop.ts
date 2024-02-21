@@ -1,8 +1,10 @@
-export function* range(start = 0, end = Infinity, step = 1) {
-  let iterCount = 0
-  for (let i = start; i < end; i += step) {
-    iterCount++
+export function* range(start: number, stop: number, step = 1) {
+  if (stop == null) {
+    start = 0
+    stop = start
+  }
+
+  for (let i = start; step > 0 ? i < stop : i > stop; i += step) {
     yield i
   }
-  return iterCount
 }

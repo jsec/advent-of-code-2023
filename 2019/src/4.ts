@@ -1,7 +1,6 @@
-import { range } from 'remeda'
-
 import { pairwise } from './util/array'
 import { getInput } from './util/input'
+import { range } from './util/loop'
 
 const isValid = (password: string, p2 = false): boolean => {
   const pairs = pairwise(password.split('').map(p => parseInt(p)))
@@ -29,13 +28,18 @@ const isValid = (password: string, p2 = false): boolean => {
 const [start, end] = getInput().split('-').map(i => parseInt(i))
 const passwords = range(start!, end!)
 
-const p1 = passwords
-  .filter(p => isValid(p.toString()))
-  .length
+let p1 = 0
+let p2 = 0
 
-const p2 = passwords
-  .filter(p => isValid(p.toString(), true))
-  .length
+for (const password of passwords) {
+  if (isValid(password.toString())) {
+    p1++
+  }
+
+  if (isValid(password.toString(), true)) {
+    p2++
+  }
+}
 
 console.log('P1:', p1)
 console.log('P2:', p2)
