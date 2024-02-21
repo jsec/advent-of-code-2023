@@ -18,9 +18,5 @@
     "@types/node": "20.10.5",
     "tsx": "4.7.0",
     "typescript": "5.3.3"
-  },
-  "dependencies": {
-    "fast-cartesian": "^9.0.0",
-    "remeda": "1.39.0"
   }
 }

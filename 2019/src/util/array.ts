@@ -14,14 +14,16 @@ export const zip = <T>(arrays: T[][]) => {
   }, (_, i) => arrays.map(a => a[i]))
 }
 
-export const cartesian = <T>(...arrs: T[][]): T[][] => {
-  return arrs.reduce<T[][]>(
-    (results, entries) =>
-      results
-        .map(result => entries.map(entry => [...result, entry]))
-        .reduce((subResults, result) => [...subResults, ...result], []),
-    [[]]
-  )
-}
+export const sum = (arr: number[]): number =>
+  arr.reduce((a, c) => a + c, 0)
 
-export const sum = (arr: number[]): number => arr.reduce((a, c) => a + c, 0)
+export const chunk = <T>(arr: T[], size = 1) =>
+  Array.from(
+    { length: Math.ceil(arr.length / size) },
+    (_, i) => arr.slice(i * size, i * size + size),
+  )
+
+export const cartesianProduct = <T>(...sets: T[][]) =>
+  sets.reduce<T[][]>((accSets, set) =>
+    accSets.flatMap(accSet => set.map(value =>
+      [...accSet, value])), [[]])

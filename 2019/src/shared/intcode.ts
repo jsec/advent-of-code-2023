@@ -1,4 +1,4 @@
-import { chunk } from 'remeda'
+import { chunk } from '../util/array'
 
 export interface Instruction {
   opcode: number
@@ -12,16 +12,16 @@ export class Intcode {
     this._memory = memory
   }
 
-  add(source1: number, source2: number, dest: number): void {
-    this._memory[dest] = this._memory[source1]! + this._memory[source2]!
+  add(s1: number, s2: number, dest: number): void {
+    this._memory[dest] = this._memory[s1]! + this._memory[s2]!
   }
 
   index(idx: number): number {
     return this._memory[idx]!
   }
 
-  multiply(source1: number, source2: number, dest: number): void {
-    this._memory[dest] = this._memory[source1]! * this._memory[source2]!
+  multiply(s1: number, s2: number, dest: number): void {
+    this._memory[dest] = this._memory[s1]! * this._memory[s2]!
   }
 
   process(inst: Instruction): void {
@@ -43,9 +43,9 @@ export class Intcode {
     const chunks = chunk(this._memory, 4)
 
     for (const chunk of chunks) {
-      const [opcode, ...params] = chunk
+      const [op, ...params] = chunk
       const inst = {
-        opcode,
+        opcode: op!,
         params,
       }
 

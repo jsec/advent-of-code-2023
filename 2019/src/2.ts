@@ -1,7 +1,7 @@
 import { map, pipe, range } from 'remeda'
 
 import { Intcode } from './shared/intcode'
-import { cartesian } from './util/array'
+import { cartesianProduct } from './util/array'
 import { getSplitInput } from './util/input'
 
 const p1 = (memory: number[]): number => {
@@ -18,7 +18,7 @@ const p1 = (memory: number[]): number => {
 const p2 = (memory: number[]): number => {
   const cpu = new Intcode(memory)
 
-  const permutations = cartesian(range(0, 100), range(0, 100))
+  const permutations = cartesianProduct(range(0, 100), range(0, 100))
 
   for (const [noun, verb] of permutations) {
     cpu.set([...memory])

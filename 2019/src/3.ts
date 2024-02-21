@@ -1,5 +1,3 @@
-import { map, pipe, range } from 'remeda'
-
 import { Position, hashPosition, manhattan, unhashPosition } from './util/grid'
 import { getInputLines } from './util/input'
 
@@ -22,8 +20,8 @@ const generatePath = (steps: Step[]): string[] => {
   for (const step of steps) {
     const { x, y } = DIRECTIONS[step.direction]
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const _ in range(0, step.length)) {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let _ = 0; _ < step.length; _++) {
       currentPos.x += x
       currentPos.y += y
       path.push(hashPosition(currentPos))
@@ -43,26 +41,15 @@ const findIntersections = (wires: string[][]): Position[] => {
     ).map(unhashPosition)
 }
 
-const findTravelDistance = (wire: string[], pos: Position): number => {
-  return wire.indexOf(hashPosition(pos))
-}
-
 const p1 = (wires: string[][]): number => {
-  const distances = pipe(
-    wires,
-    findIntersections,
-    map(pos => manhattan(pos, { x: 0, y: 0 }))
-  )
-
+  const distances = findIntersections(wires).map(pos => manhattan(pos, { x: 0, y: 0 }))
   return Math.min(...distances)
 }
 
 const p2 = (wires: string[][]): number => {
-  const sums = findIntersections(wires).map(point =>
-    wires.map(wire =>
-      findTravelDistance(wire, point))
-      .reduce((a, c) => a + c, 0)
-  )
+  const sums = findIntersections(wires).map(p =>
+    wires.map(w => w.indexOf(hashPosition(p)) + 1)
+      .reduce((a, c) => a + c, 0))
 
   return Math.min(...sums)
 }
