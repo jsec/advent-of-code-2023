@@ -10,4 +10,4 @@ def get_input_lines() -> list[str]:
 
 def get_split_input(delimiter: str) -> list[str]:
     with open("input.txt") as file:
-        return file.read().split(delimiter)
+        return file.read().strip().split(delimiter)
