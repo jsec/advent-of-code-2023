@@ -13,4 +13,4 @@ Some of them have been cleaned up and optimized. Some are ugly and convoluted. I
 - 2018 (JavaScript) - 22
 - 2017 (Python) - 26
 - 2016 (TypeScript) - 29
-- 2015 (Python) - 22
+- 2015 (Python) - 25
