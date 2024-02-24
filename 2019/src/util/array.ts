@@ -23,7 +23,7 @@ export const chunk = <T>(arr: T[], size = 1) =>
     (_, i) => arr.slice(i * size, i * size + size),
   )
 
-export const cartesianProduct = <T>(...sets: T[][]) =>
-  sets.reduce<T[][]>((accSets, set) =>
-    accSets.flatMap(accSet => set.map(value =>
-      [...accSet, value])), [[]])
+export const cartesianProduct = <T>(...arrs: T[][]) =>
+  arrs.reduce<T[][]>((acc, curr) =>
+    acc.flatMap(acc => curr.map(value =>
+      [...acc, value])), [[]])

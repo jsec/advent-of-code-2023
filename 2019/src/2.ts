@@ -1,10 +1,10 @@
-import { Intcode } from './shared/intcode'
+import { Computer } from './shared/computer'
 import { cartesianProduct } from './util/array'
 import { getSplitInput } from './util/input'
 import { range } from './util/loop'
 
 const p1 = (memory: number[]): number => {
-  const cpu = new Intcode(memory)
+  const cpu = new Computer(memory)
 
   cpu.setIndex(1, 12)
   cpu.setIndex(2, 2)
@@ -15,7 +15,7 @@ const p1 = (memory: number[]): number => {
 }
 
 const p2 = (memory: number[]): number => {
-  const cpu = new Intcode(memory)
+  const cpu = new Computer(memory)
 
   const permutations = cartesianProduct([...range(0, 100)], [...range(0, 100)])
 

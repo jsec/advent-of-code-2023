@@ -1,11 +1,21 @@
 import { chunk } from '../util/array'
 
-export interface Instruction {
-  opcode: number
-  params: number[]
+enum Mode {
+  Position,
+  Immediate,
 }
 
-export class Intcode {
+interface Parameter {
+  mode: Mode
+  value: number
+}
+
+export interface Instruction {
+  opcode: number
+  params: Parameter[]
+}
+
+export class Computer {
   private _memory: number[]
 
   constructor(memory: number[]) {
@@ -14,6 +24,10 @@ export class Intcode {
 
   add(s1: number, s2: number, dest: number): void {
     this._memory[dest] = this._memory[s1]! + this._memory[s2]!
+  }
+
+  get(idx: number): number {
+    return this._memory[idx]!
   }
 
   index(idx: number): number {
