@@ -35,14 +35,29 @@ const phase = (input: number[]): number[] => {
   return output
 }
 
-const p1 = (input: number[], phases: number): string => {
-  for (let i = 0; i < phases; i++) {
+const p1 = (): string => {
+  let input = getInput().split('').map(Number)
+
+  for (let i = 0; i < 100; i++) {
     input = phase(input)
   }
 
   return input.slice(0, 8).join('')
 }
 
-const input = getInput().split('').map(i => parseInt(i))
+const p2 = (): string => {
+  let input = getInput().repeat(10000).split('').map(Number)
+  const offset = Number(input.slice(0, 7).join(''))
+  input = input.slice(offset)
 
-console.log('P1:', p1(input, 100))
+  for (let i = 0; i < 100; i++) {
+    for (let i = input.length - 1; i >= 0; i--) {
+      input[i] = ((input[i + 1] || 0) + input[i]!) % 10
+    }
+  }
+
+  return input.slice(0, 8).join('')
+}
+
+console.log('P1:', p1())
+console.log('P2:', p2())
