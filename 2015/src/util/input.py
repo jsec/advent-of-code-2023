@@ -1,6 +1,6 @@
 def get_input() -> str:
     with open("input.txt") as file:
-        return file.read()
+        return file.read().strip()
 
 
 def get_input_lines() -> list[str]:
