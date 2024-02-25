@@ -8,23 +8,38 @@ class Deer:
         self.name = name
         self.velocity = velocity
         self.duration = duration
-        self.rest = rest
-        self.distances = []
+        self.rest_duration = rest
+        self.distance = 0
+        self.splits = []
+        self.points = 0
+
+    def fly(self, duration: int) -> None:
+        for _ in range(duration):
+            self.distance += self.velocity
+            self.splits.append(self.distance)
+
+    def rest(self, duration: int) -> None:
+        for _ in range(duration):
+            self.splits.append(self.distance)
 
     def race(self, time: int) -> None:
-        distance = 0
+        cycles = time // (self.duration + self.rest_duration)
 
-        while time > 0:
-            fly_time = min(self.duration, time)
-            distance += self.velocity * fly_time
-            time -= fly_time
+        for _ in range(cycles):
+            self.fly(self.duration)
+            self.rest(self.rest_duration)
 
-            self.distances.append(distance)
+        remainder = time % (self.duration + self.rest_duration)
 
-            if time == 0 or time <= self.rest:
-                break
+        if remainder <= self.duration:
+            self.fly(remainder)
+        else:
+            self.fly(self.duration)
+            self.rest(remainder - self.duration)
 
-            time -= self.rest
+    def check_if_leading(self, idx: int, lead_distance: int) -> None:
+        if self.splits[idx] == lead_distance:
+            self.points += 1
 
 
 def create_deer(line: str) -> Deer:
@@ -41,10 +56,22 @@ def p1(deer) -> int:
     for d in deer:
         d.race(duration)
 
-    distances = list(map(lambda d: d.distances[-1], deer))
+    distances = list(map(lambda d: d.distance, deer))
     return max(distances)
+
+
+def p2(deer: list[Deer]) -> int:
+    for i in range(duration):
+        lead_distance = max(list(map(lambda d: d.splits[i], deer)))
+
+        for d in deer:
+            d.check_if_leading(i, lead_distance)
+
+    points = list(map(lambda d: d.points, deer))
+    return max(points)
 
 
 deer = [create_deer(line) for line in get_input_lines()]
 
 print("P1:", p1(deer))
+print("P2:", p2(deer))
