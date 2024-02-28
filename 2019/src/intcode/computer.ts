@@ -1,9 +1,16 @@
 type OutputCallback = (value: number) => unknown
 
+interface Instruction {
+  op: Operation
+  opcode: Opcode
+  params: number[]
+}
+
 interface Operation {
   exec: (...args: number[]) => void
   name: string
   params: number
+  persist: boolean
 }
 
 enum Mode {
@@ -13,18 +20,14 @@ enum Mode {
 
 enum Opcode {
   ADD = '01',
+  EQ = '08',
+  IN = '03',
+  JMPF = '06',
+  JMPT = '05',
+  LT = '07',
   MUL = '02',
+  OUT = '04',
   TERM = '99',
-}
-
-interface Parameter {
-  mode: Mode
-  value: number
-}
-
-interface Instruction {
-  op: string
-  params: Parameter[]
 }
 
 export class Computer {
@@ -40,22 +43,78 @@ export class Computer {
     this.memory = []
     this.originalProgram = []
     this.inputs = []
-    this.outputCallback = value => console.log(value)
+    this.outputCallback = value => console.log('OUTPUT:', value)
 
     this.ops = {
       [Opcode.ADD]: {
         exec: (a: number, b: number, c: number) => {
-          this.memory[c] = this.memory[a]! + this.memory[b]!
+          this.memory[c] = a + b
         },
         name: 'add',
         params: 3,
+        persist: true,
+      },
+      [Opcode.EQ]: {
+        exec: (a: number, b: number, c: number) => {
+          this.memory[c] = a === b ? 1 : 0
+        },
+        name: 'equals',
+        params: 3,
+        persist: true,
+      },
+      [Opcode.IN]: {
+        exec: (a: number) => {
+          this.memory[a] = this.inputs.pop()!
+        },
+        name: 'input',
+        params: 1,
+        persist: true,
+      },
+      [Opcode.JMPF]: {
+        exec: (a: number, b: number) => {
+          if (a === 0) {
+            console.log('setting pointer to:', b)
+            this.pointer = b
+          }
+        },
+        name: 'jump-false',
+        params: 2,
+        persist: false,
+      },
+      [Opcode.JMPT]: {
+        exec: (a: number, b: number) => {
+          if (a !== 0) {
+            console.log('setting pointer to:', b)
+            this.pointer = b
+          }
+        },
+        name: 'jump-true',
+        params: 2,
+        persist: false,
+      },
+      [Opcode.LT]: {
+        exec: (a: number, b: number, c: number) => {
+          this.memory[c] = a < b ? 1 : 0
+        },
+        name: 'less-than',
+        params: 3,
+        persist: true,
       },
       [Opcode.MUL]: {
         exec: (a: number, b: number, c: number) => {
-          this.memory[c] = this.memory[b]! * this.memory[a]!
+          this.memory[c] = a * b
         },
         name: 'mult',
         params: 3,
+        persist: true,
+      },
+      [Opcode.OUT]: {
+        exec: (a: number) => {
+          this.outputCallback(a)
+        },
+        name: 'output',
+        params: 1,
+        persist: false,
       },
       [Opcode.TERM]: {
         exec: () => {
@@ -63,6 +122,7 @@ export class Computer {
         },
         name: 'term',
         params: 0,
+        persist: false,
       },
     }
   }
@@ -74,6 +134,46 @@ export class Computer {
   assign(idx: number, value: number): this {
     this.memory[idx] = value
     return this
+  }
+
+  getInstruction(): Instruction {
+    const value = this.memory[this.pointer]!.toString()
+
+    const opcode = value.slice(-2).padStart(2, '0') as Opcode
+    const op = this.ops[opcode]
+
+    this.pointer++
+
+    console.log('value:', value)
+
+    const modes = value
+      .padStart(op.params + 2, '0')
+      .slice(0, -2)
+      .split('')
+      .reverse()
+
+    const params = this.memory
+      .slice(this.pointer, this.pointer + op.params)
+      .map((p, idx) => {
+        switch (modes[idx]) {
+          case Mode.Immediate:
+            return p
+          case Mode.Position:
+            if (op.persist && idx === op.params - 1) {
+              return p
+            }
+
+            return this.addr(p)
+          default:
+            throw Error('Invalid Mode')
+        }
+      })
+
+    return {
+      op,
+      opcode,
+      params,
+    }
   }
 
   load(program: number[]): this {
@@ -98,16 +198,17 @@ export class Computer {
     this.originalProgram = [...this.memory]
     this.pointer = 0
 
-    let current = this.parseOpcode()
+    let inst = this.getInstruction()
 
-    while (current !== Opcode.TERM) {
-      const op = this.ops[current]!
-      this.pointer++
-      const params = this.memory.slice(this.pointer, this.pointer + op.params)
-
+    while (inst.opcode !== Opcode.TERM) {
+      const { op, opcode, params } = inst
       op.exec(...params)
-      this.pointer += op.params
-      current = this.parseOpcode()
+
+      if (opcode !== Opcode.JMPF && opcode !== Opcode.JMPT) {
+        this.pointer += op.params
+      }
+
+      inst = this.getInstruction()
     }
 
     return this

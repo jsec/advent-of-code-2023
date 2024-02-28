@@ -3,14 +3,12 @@ import { cartesianProduct } from './util/array'
 import { getSplitInput } from './util/input'
 import { range } from './util/loop'
 
-const p1 = (program: number[]): number => {
-  return new Computer()
-    .load(program)
-    .assign(1, 12)
-    .assign(2, 2)
-    .run()
-    .addr(0)
-}
+const p1 = (program: number[]): number => new Computer()
+  .load(program)
+  .assign(1, 12)
+  .assign(2, 2)
+  .run()
+  .addr(0)
 
 const p2 = (program: number[]): number => {
   const permutations = cartesianProduct([...range(0, 100)], [...range(0, 100)])
@@ -31,7 +29,7 @@ const p2 = (program: number[]): number => {
   return -1
 }
 
-const program = getSplitInput(',').map(i => parseInt(i))
+const program = getSplitInput(',').map(index => parseInt(index))
 
 console.log('P1:', p1([...program]))
 console.log('P2:', p2([...program]))
