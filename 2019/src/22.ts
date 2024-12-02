@@ -1,10 +1,10 @@
-import { range } from 'remeda'
+import { range } from 'remeda';
 
-import { getInputLines } from './util/input'
+import { getInputLines } from './util/input';
 
 interface Technique {
-  type: string
-  value: number
+  type: string,
+  value: number,
 }
 
 const parse = (line: string): Technique => {
@@ -12,58 +12,64 @@ const parse = (line: string): Technique => {
     return {
       type: 'new',
       value: 0,
-    }
+    };
   }
 
-  const split = line.split(' ')
+  const split = line.split(' ');
 
   if (line.includes('increment')) {
     return {
       type: 'increment',
-      value: parseInt(split[3]!),
-    }
+      value: Number.parseInt(split[3]!),
+    };
   }
 
   return {
     type: 'cut',
-    value: parseInt(split[1]!),
-  }
-}
+    value: Number.parseInt(split[1]!),
+  };
+};
 
-const cut = (deck: number[], idx: number): number[] => deck.slice(idx).concat(deck.slice(0, idx))
+const cut = (deck: number[], index: number): number[] => deck.slice(index).concat(deck.slice(0, index));
 
 const increment = (deck: number[], step: number, cardCount: number): number[] => {
-  const result = range(0, cardCount)
+  const result = range(0, cardCount);
 
-  for (let i = 0; i < deck.length; i++) {
-    const idx = (i * step) % deck.length
-    result[idx] = deck[i]!
+  for (let index = 0; index < deck.length; index++) {
+    const index_ = (index * step) % deck.length;
+    result[index_] = deck[index]!;
   }
 
-  return result
-}
+  return result;
+};
 
 const shuffle = (techniques: Technique[], cardCount: number): number[] => {
-  let deck = range(0, cardCount)
+  let deck = range(0, cardCount);
 
   for (const t of techniques) {
     switch (t.type) {
-      case 'new':
-        deck = deck.reverse()
-        break
-      case 'cut':
-        deck = cut(deck, t.value)
-        break
-      case 'increment':
-        deck = increment(deck, t.value, cardCount)
-        break
+      case 'new': { {
+        deck = deck.reverse();
+        break;
+      }
+      }
+      case 'cut': { {
+        deck = cut(deck, t.value);
+        break;
+      }
+      }
+      case 'increment': { {
+        deck = increment(deck, t.value, cardCount);
+        break;
+      }
+      }
     }
   }
 
-  return deck
-}
+  return deck;
+};
 
-const techniques = getInputLines().map(parse)
-const shuffled = shuffle(techniques, 10007)
+const techniques = getInputLines().map(parse);
+const shuffled = shuffle(techniques, 10_007);
 
-console.log('P1:', shuffled.indexOf(2019))
+console.log('P1:', shuffled.indexOf(2019));
