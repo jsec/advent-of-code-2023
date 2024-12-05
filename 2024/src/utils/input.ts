@@ -15,3 +15,7 @@ export function getSplitInput(delimiter = '\n') {
 export function getInputLines() {
   return getSplitInput().map(l => l.trim());
 }
+
+export function getInputMatrix(delimiter = '') {
+  return getInputLines().map(l => l.split(delimiter));
+}

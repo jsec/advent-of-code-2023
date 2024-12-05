@@ -10,3 +10,7 @@ export const areEqualArrays = <T>(first: T[], second: T[]) => Array.isArray(firs
   && Array.isArray(second)
   && first.length === second.length
   && first.every((value, idx) => value === second[idx]);
+
+export const transpose = <T>(matrix: T[][]) => {
+  return matrix[0]!.map((_, i) => matrix.map(row => row[i]!));
+};
