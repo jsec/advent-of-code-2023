@@ -1,3 +1,4 @@
+import { moveItem } from './utils/array.js';
 import { getSplitInput } from './utils/input.js';
 
 const [rules, updatePages] = getSplitInput('\n\n');
@@ -18,22 +19,48 @@ const updates = updatePages!
   .split('\n')
   .map(u => u.split(',').map(Number));
 
-/// PART 1 ///
-const p1 = updates
-  .map((update) => {
-    let valid = true;
+const isUpdateValid = (update: number[]) => {
+  for (const [idx, page] of update.entries()) {
+    const deps = ruleMap[page];
 
-    for (const [idx, page] of update.entries()) {
-      const deps = ruleMap[page];
+    if (deps && deps.some(dep => update.indexOf(dep) > idx)) {
+      return false;
+    }
+  }
 
-      if (deps && deps.some(dep => update.indexOf(dep) > idx)) {
-        valid = false;
-        break;
-      }
+  return true;
+};
+
+const fixUntilValid = (update: number[]) => {
+  for (const [idx, page] of update.entries()) {
+    const deps = ruleMap[page];
+
+    if (!deps) {
+      continue;
     }
 
-    return valid ? update.at(update.length / 2) : 0;
-  })
+    for (const dep of deps) {
+      const depIdx = update.indexOf(dep);
+      if (depIdx > idx) {
+        const newUpdate = moveItem(update, depIdx, idx === 0 ? 0 : idx - 1);
+        return fixUntilValid(newUpdate);
+      }
+    }
+  }
+
+  return update.at(update.length / 2);
+};
+
+/// PART 1 ///
+const p1 = updates
+  .map(update => isUpdateValid(update) ? update.at(update.length / 2) : 0)
   .reduce((a, c) => a! + c!, 0);
 
 console.log('P1:', p1);
+
+/// PART 2 ///
+const p2 = updates
+  .map(update => isUpdateValid(update) ? 0 : fixUntilValid(update))
+  .reduce((a, c) => a! + c!, 0);
+
+console.log('P2:', p2);
