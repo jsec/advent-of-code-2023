@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "Jarrod Seccombe <jarrod.seccombe@icloud.com>",
   "license": "MIT",
+  "engines": {
+    "node": "^22.11.0"
+  },
   "scripts": {
     "lint": "eslint --ext .ts . --max-warnings 0"
   },

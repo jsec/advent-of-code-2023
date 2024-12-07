@@ -15,7 +15,7 @@ export const transpose = <T>(matrix: T[][]) => {
   return matrix[0]!.map((_, i) => matrix.map(row => row[i]!));
 };
 
-export function moveItem<T>(arr: T[], from: number, to: number): T[] {
+export const moveItem = <T>(arr: T[], from: number, to: number): T[] => {
   if (to === from) {
     return arr;
   }
@@ -27,4 +27,4 @@ export function moveItem<T>(arr: T[], from: number, to: number): T[] {
   }
   arr[to] = target;
   return arr;
-}
+};
