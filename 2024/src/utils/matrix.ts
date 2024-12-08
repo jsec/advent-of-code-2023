@@ -1,3 +1,5 @@
+import type { Coordinate } from './types.js';
+
 export class Matrix<TData> {
   private _data: TData[][];
 
@@ -39,3 +41,7 @@ export class Matrix<TData> {
     return this.data[0]!.length;
   }
 }
+
+export const manhattan = (pos1: Coordinate, pos2: Coordinate): number => {
+  return Math.abs(pos2.x - pos1.x) + Math.abs(pos2.y - pos1.y);
+};
