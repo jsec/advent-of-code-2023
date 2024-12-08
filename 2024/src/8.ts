@@ -9,19 +9,7 @@ interface Antenna extends Coordinate {
 }
 
 const calculateDistances = (coordinate: Coordinate, matrix: string[][]) => {
-  const distances: number[][] = [];
-
-  for (let x = 0; x < matrix.length; x++) {
-    const row = [];
-
-    for (let y = 0; y < matrix[0]!.length; y++) {
-      row.push(manhattan(coordinate, { x, y }));
-    }
-
-    distances.push(row);
-  }
-
-  return distances;
+  return matrix.map((row, rowIdx) => row.map((_, colIdx) => manhattan(coordinate, { x: rowIdx, y: colIdx })));
 };
 
 const parseInput = () => {
@@ -50,7 +38,7 @@ const parseInput = () => {
   return antennas;
 };
 
-const findAntinodes = (antennas: Antenna[]) => {
+const findAntinodes = (antennas: Antenna[], p1 = true) => {
   const antinodes: number[][] = [];
 
   for (let i = 0; i < antennas.length; i++) {
@@ -60,13 +48,16 @@ const findAntinodes = (antennas: Antenna[]) => {
     for (const other of others) {
       for (const [rowIdx, row] of distances.entries()) {
         for (const [colIdx, distance] of row.entries()) {
-          const otherDistance = other.distances[rowIdx]![colIdx]!;
-
           if (inLine(
             { x, y },
             { x: other.x, y: other.y },
             { x: rowIdx, y: colIdx },
-          ) && distance == otherDistance * 2) {
+          )) {
+            const otherDistance = other.distances[rowIdx]![colIdx]!;
+            if (p1 && distance !== otherDistance * 2) {
+              continue;
+            }
+
             antinodes.push([rowIdx, colIdx]);
           }
         }
@@ -77,13 +68,14 @@ const findAntinodes = (antennas: Antenna[]) => {
   return antinodes;
 };
 
-const p1 = () => {
+const solve = (p1 = true) => {
   const antennas = parseInput();
   const antinodes = Object.keys(antennas)
-    .flatMap(key => findAntinodes(antennas[key]!))
+    .flatMap(key => findAntinodes(antennas[key]!, p1))
     .map(node => `${node[0]}-${node[1]}`);
 
   return new Set(antinodes).size;
 };
 
-console.log('P1:', p1());
+console.log('P1:', solve());
+console.log('P2:', solve(false));
