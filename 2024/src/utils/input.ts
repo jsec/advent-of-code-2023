@@ -19,3 +19,7 @@ export function getInputLines() {
 export function getInputMatrix(delimiter = '') {
   return getInputLines().map(l => l.split(delimiter));
 }
+
+export function getNumberMatrix(delimiter = '') {
+  return getInputMatrix(delimiter).map(line => line.map(Number));
+}

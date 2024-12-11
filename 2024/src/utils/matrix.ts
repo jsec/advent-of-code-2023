@@ -2,13 +2,23 @@ import type { Coordinate } from './types.js';
 
 export class Matrix<TData> {
   private _data: TData[][];
+  private _neighborMap = [
+    [-1, -1],
+    [-1, 1],
+    [1, -1],
+    [1, 1],
+    [-1, 0],
+    [0, -1],
+    [0, 1],
+    [1, 0],
+  ];
 
   constructor(fn: () => TData[][]) {
     this._data = fn();
   }
 
-  at(y: number, x: number) {
-    return this.data[y]![x];
+  at(x: number, y: number) {
+    return this._data[x]![y]!;
   }
 
   find(item: TData) {
@@ -19,6 +29,32 @@ export class Matrix<TData> {
     }
 
     throw new Error('not found');
+  }
+
+  findAll(item: TData): Coordinate[] {
+    const coordinates: Coordinate[] = [];
+    for (const [rowIdx, row] of this._data.entries()) {
+      for (const [colIdx, value] of row.entries()) {
+        if (value === item) {
+          coordinates.push({ x: rowIdx, y: colIdx });
+        }
+      }
+    }
+
+    return coordinates;
+  }
+
+  inBounds(x: number, y: number) {
+    return x >= 0 && y >= 0 && x < this._data.length && y < this._data[0]!.length;
+  }
+
+  neighbors(x: number, y: number, includeDiagonals = false): Coordinate[] {
+    const neighbors = includeDiagonals ? this._neighborMap : this._neighborMap.slice(4);
+
+    return neighbors
+      .map(([nx, ny]) => [x + nx!, y + ny!])
+      .filter(([x, y]) => this.inBounds(x!, y!))
+      .map(([x, y]) => ({ x: x!, y: y! }));
   }
 
   print() {
