@@ -1,7 +1,4 @@
-import BigNumber from 'bignumber.js';
-import { ceil, floor, isInteger, lsolve, lusolve, usolve } from 'mathjs';
-
-import { getInput, getSplitInput } from './utils/input.js';
+import { getSplitInput } from './utils/input.js';
 
 interface Axis {
   x: number;
@@ -14,7 +11,7 @@ interface Machine {
   Prize: Axis;
 }
 
-const createMachine = (input: string): Machine => {
+const createMachine = (input: string, p2: boolean): Machine => {
   const transform = input
     .split('\n')
     .map(line => line
@@ -29,50 +26,38 @@ const createMachine = (input: string): Machine => {
       y: pair[1]!,
     }));
 
+  const prize = transform[2]!;
+  if (p2) {
+    prize.x += 10_000_000_000_000;
+    prize.y += 10_000_000_000_000;
+  }
+
   return {
     A: transform[0]!,
     B: transform[1]!,
-    Prize: transform[2]!,
+    Prize: prize,
   };
 };
 
 const solve = (machine: Machine) => {
-  const coefficients = [
-    [machine.A.x, machine.B.x],
-    [machine.A.y, machine.B.y],
-  ];
+  const { A, B, Prize } = machine;
+  const x = (Prize.x * B.y - Prize.y * B.x) / (A.x * B.y - A.y * B.x);
+  const y = (A.x * Prize.y - A.y * Prize.x) / (A.x * B.y - A.y * B.x);
 
-  const constants = [machine.Prize.x, machine.Prize.y];
+  if (x % 1 === 0 && y % 1 === 0) {
+    return x * 3 + y;
+  }
 
-  const solutions = lusolve(coefficients, constants)
-    .map((solution) => {
-      const str = solution.toString();
-      // floating point hackery
-      if (str.includes('.99999')) {
-        return ceil(solution);
-      }
-      if (str.includes('.00000')) {
-        return floor(solution);
-      }
-
-      return solution;
-    });
-
-  return {
-    A: solutions[0][0]!,
-    B: solutions[1][0]!,
-  };
+  return 0;
 };
 
-const p1 = getSplitInput('\n\n')
-  .map(raw => solve(createMachine(raw)))
-  .filter((solution) => {
-    return solution.A <= 100
-      && solution.B <= 100
-      && isInteger(solution.A)
-      && isInteger(solution.B);
-  })
-  .map(solution => 3 * solution.A + solution.B)
-  .reduce((a, c) => a + c, 0);
+const run = (p2 = false) => {
+  const machines = getSplitInput('\n\n').map(i => createMachine(i, p2));
 
-console.log('P1:', p1);
+  return machines
+    .map(machine => solve(machine))
+    .reduce((a, c) => a + c, 0);
+};
+
+console.log('p1:', run());
+console.log('p2:', run(true));
