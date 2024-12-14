@@ -30,3 +30,9 @@ export const moveItem = <T>(arr: T[], from: number, to: number): T[] => {
 };
 
 export const zip = <T, K>(a: T[], b: K[]): [T, K][] => a.map((k, i) => [k, b[i]!]);
+
+export const createArray = <T>(rows: number, columns: number, defaultValue: T): T[][] => {
+  return Array.from({ length: rows }, () => (
+    Array.from({ length: columns }, () => defaultValue)
+  ));
+};
