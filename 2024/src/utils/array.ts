@@ -36,3 +36,9 @@ export const createArray = <T>(rows: number, columns: number, defaultValue: T): 
     Array.from({ length: columns }, () => defaultValue)
   ));
 };
+
+export const print2d = <T>(arr: T[][]) => {
+  for (const row of arr) {
+    console.log(row.join(''));
+  }
+};

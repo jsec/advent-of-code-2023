@@ -1,5 +1,8 @@
+import readline from 'readline-sync';
+
 import type { Coordinate } from './utils/types.js';
 
+import { createArray, print2d } from './utils/array.js';
 import { getInputLines } from './utils/input.js';
 
 interface Robot {
@@ -28,43 +31,87 @@ const getRobots = (input: string[]): Robot[] => {
     });
 };
 
-const solve = (robots: Robot[], rows: number, columns: number) => {
-  let q1 = 0;
-  let q2 = 0;
-  let q3 = 0;
-  let q4 = 0;
+const runner = () => {
+  let count = 0;
 
-  const midX = Math.floor(rows / 2);
-  const midY = Math.floor(columns / 2);
+  function getSafetyRating(robots: Robot[], rows: number, columns: number, seconds = 1) {
+    count += 1;
 
-  for (const robot of robots) {
-    const nx = robot.pos.x + (robot.dx * 100);
-    const ny = robot.pos.y + (robot.dy * 100);
+    let q1 = 0;
+    let q2 = 0;
+    let q3 = 0;
+    let q4 = 0;
 
-    robot.pos.x = (nx % rows + rows) % rows;
-    robot.pos.y = (ny % columns + columns) % columns;
+    const midX = Math.floor(rows / 2);
+    const midY = Math.floor(columns / 2);
 
-    if (robot.pos.x < midX && robot.pos.y < midY) {
-      q1 += 1;
+    for (const robot of robots) {
+      robot.pos.x = getNextPosition(robot.pos.x, robot.dx, seconds, rows);
+      robot.pos.y = getNextPosition(robot.pos.y, robot.dy, seconds, columns);
+
+      if (robot.pos.x < midX && robot.pos.y < midY) {
+        q1 += 1;
+      }
+
+      if (robot.pos.x < midX && robot.pos.y > midY) {
+        q2 += 1;
+      }
+
+      if (robot.pos.x > midX && robot.pos.y < midY) {
+        q3 += 1;
+      }
+
+      if (robot.pos.x > midX && robot.pos.y > midY) {
+        q4 += 1;
+      }
     }
 
-    if (robot.pos.x < midX && robot.pos.y > midY) {
-      q2 += 1;
-    }
+    const safetyRating = q1 * q2 * q3 * q4;
+    return { count, safetyRating };
+  };
 
-    if (robot.pos.x > midX && robot.pos.y < midY) {
-      q3 += 1;
-    }
+  return getSafetyRating;
+};
 
-    if (robot.pos.x > midX && robot.pos.y > midY) {
-      q4 += 1;
+const getNextPosition = (position: number, delta: number, multiplier: number, length: number) => {
+  const newPosition = position + (delta * multiplier);
+  return newPosition > 0 ? newPosition % length : (length - (Math.abs(newPosition) % length)) % length;
+};
+
+/// PART 1 ///
+const p1 = (robots: Robot[], rows: number, columns: number) => {
+  const getSafetyRating = runner();
+  const { safetyRating } = getSafetyRating(robots, rows, columns, 100);
+
+  return safetyRating;
+};
+
+/// PART 2 ///
+const p2 = (robots: Robot[], rows: number, columns: number) => {
+  let minSafetyRating = Infinity;
+
+  const getSafetyRating = runner();
+
+  while (true) {
+    const grid = createArray(rows, columns, '.');
+    const { count, safetyRating } = getSafetyRating(robots, rows, columns);
+
+    if (safetyRating <= minSafetyRating) {
+      minSafetyRating = safetyRating;
+      for (const robot of robots) {
+        grid[robot.pos.x]![robot.pos.y] = 'X';
+      }
+
+      print2d(grid);
+
+      if (readline.keyInYN('Easter egg?')) {
+        return count + 100;
+      }
     }
   }
-
-  return q1 * q2 * q3 * q4;
 };
 
 const robots = getRobots(getInputLines());
 
-const p1 = solve(robots, 103, 101);
-console.log('P1:', p1);
+console.log('P1:', p1(robots, 103, 101));
+console.log('P2:', p2(robots, 103, 101));
