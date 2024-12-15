@@ -21,10 +21,13 @@ export class Matrix<TData> {
     return this._data[x]![y]!;
   }
 
-  find(item: TData) {
+  find(item: TData): Coordinate {
     for (const [idx, row] of this._data.entries()) {
       if (row.includes(item)) {
-        return [idx, row.indexOf(item)];
+        return {
+          x: idx,
+          y: row.indexOf(item),
+        };
       }
     }
 
@@ -61,8 +64,8 @@ export class Matrix<TData> {
     console.table(this._data);
   }
 
-  set(y: number, x: number, value: TData) {
-    this.data[y]![x] = value;
+  set(x: number, y: number, value: TData) {
+    this.data[x]![y] = value;
   }
 
   get data() {
