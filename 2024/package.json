@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/node": "^22.10.1",
     "mathjs": "^14.0.1",
-    "readline-sync": "^1.4.10"
+    "readline-sync": "^1.4.10",
+    "tinyqueue": "^3.0.0"
   }
 }
