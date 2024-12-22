@@ -1,28 +1,28 @@
 export class VM {
-  private _outputs: number[];
+  private _outputs: bigint[];
   private ptr = 0;
-  private registers: { a: number; b: number; c: number };
+  private registers: { a: bigint; b: bigint; c: bigint };
 
-  constructor(a: number, b: number, c: number) {
+  constructor(a: bigint, b: bigint, c: bigint) {
     this.registers = { a, b, c };
     this._outputs = [];
   }
 
-  private adv(operand: number) {
+  private adv(operand: bigint) {
     const combo = this.getComboOperand(operand)!;
-    this.registers.a = Math.floor(this.registers.a / (2 ** combo));
+    this.registers.a = this.registers.a / (2n ** combo);
     this.ptr += 2;
   }
 
-  private bdv(operand: number) {
+  private bdv(operand: bigint) {
     const combo = this.getComboOperand(operand)!;
-    this.registers.b = Math.floor(this.registers.a / (2 ** combo));
+    this.registers.b = this.registers.a / (2n ** combo);
     this.ptr += 2;
   }
 
-  private bst(operand: number) {
+  private bst(operand: bigint) {
     const combo = this.getComboOperand(operand);
-    this.registers.b = combo % 8;
+    this.registers.b = combo % 8n;
     this.ptr += 2;
   }
 
@@ -31,48 +31,48 @@ export class VM {
     this.ptr += 2;
   }
 
-  private bxl(operand: number) {
+  private bxl(operand: bigint) {
     this.registers.b = this.registers.b ^ operand;
     this.ptr += 2;
   }
 
-  private cdv(operand: number) {
+  private cdv(operand: bigint) {
     const combo = this.getComboOperand(operand)!;
-    this.registers.c = Math.floor(this.registers.a / (2 ** combo));
+    this.registers.c = this.registers.a / (2n ** combo);
     this.ptr += 2;
   }
 
-  private exec(opcode: number, operand: number) {
+  private exec(opcode: bigint, operand: bigint) {
     switch (opcode) {
-      case 0: {
+      case 0n: {
         this.adv(operand);
         break;
       }
-      case 1: {
+      case 1n: {
         this.bxl(operand);
         break;
       }
-      case 2: {
+      case 2n: {
         this.bst(operand);
         break;
       }
-      case 3: {
+      case 3n: {
         this.jnz(operand);
         break;
       }
-      case 4: {
+      case 4n: {
         this.bxc();
         break;
       }
-      case 5: {
+      case 5n: {
         this.out(operand);
         break;
       }
-      case 6: {
+      case 6n: {
         this.bdv(operand);
         break;
       }
-      case 7: {
+      case 7n: {
         this.cdv(operand);
         break;
       }
@@ -82,21 +82,21 @@ export class VM {
     }
   }
 
-  private getComboOperand(operand: number) {
+  private getComboOperand(operand: bigint) {
     switch (operand) {
-      case 0:
-      case 1:
-      case 2:
-      case 3: {
+      case 0n:
+      case 1n:
+      case 2n:
+      case 3n: {
         return operand;
       }
-      case 4: {
+      case 4n: {
         return this.registers.a;
       }
-      case 5: {
+      case 5n: {
         return this.registers.b;
       }
-      case 6: {
+      case 6n: {
         return this.registers.c;
       }
       default: {
@@ -105,22 +105,22 @@ export class VM {
     }
   }
 
-  private jnz(operand: number) {
-    if (this.registers.a === 0) {
+  private jnz(operand: bigint) {
+    if (this.registers.a === 0n) {
       this.ptr += 2;
       return;
     }
 
-    this.ptr = operand;
+    this.ptr = Number(operand);
   }
 
-  private out(operand: number) {
+  private out(operand: bigint) {
     const combo = this.getComboOperand(operand);
-    this._outputs.push(combo % 8);
+    this._outputs.push(combo % 8n);
     this.ptr += 2;
   }
 
-  run(program: number[]) {
+  run(program: bigint[]) {
     this.ptr = 0;
 
     while (this.ptr < program.length - 1) {
