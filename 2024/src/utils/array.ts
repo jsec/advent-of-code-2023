@@ -11,9 +11,23 @@ export const areEqualArrays = <T>(first: T[], second: T[]) => Array.isArray(firs
   && first.length === second.length
   && first.every((value, idx) => value === second[idx]);
 
+export const reverse = <T>(matrix: T[][]) => matrix.map(row => row.reverse());
+
 export const transpose = <T>(matrix: T[][]) => {
-  return matrix[0]!.map((_, i) => matrix.map(row => row[i]!));
+  for (let row = 0; row < matrix.length; row++) {
+    for (let column = 0; column < row; column++) {
+      const temp = matrix[row]![column]!;
+
+      matrix[row]![column] = matrix[column]![row]!;
+      matrix[column]![row] = temp;
+    }
+  }
+  return matrix;
 };
+
+export const rotate = <T>(matrix: T[][]) => reverse(transpose(matrix));
+
+export const rotateCounter = <T>(matrix: T[][]) => transpose(reverse(matrix));
 
 export const moveItem = <T>(arr: T[], from: number, to: number): T[] => {
   if (to === from) {
