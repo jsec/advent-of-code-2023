@@ -1,3 +1,6 @@
+import { sum } from 'es-toolkit';
+import memoize from 'memoize';
+
 import { getSplitInput } from './utils/input.js';
 
 const parseInput = () => {
@@ -9,7 +12,7 @@ const parseInput = () => {
   };
 };
 
-const checkTarget = (target: string, patterns: string[]): boolean => {
+const findAnyDesigns = (target: string, patterns: string[]): boolean => {
   if (target.length === 0) {
     return true;
   }
@@ -20,13 +23,27 @@ const checkTarget = (target: string, patterns: string[]): boolean => {
     return false;
   }
 
-  return candidates.some(c => checkTarget(target.slice(c.length), patterns));
+  return candidates.some(c => findAnyDesigns(target.slice(c.length), patterns));
 };
 
-const p1 = (targets: string[], patterns: string[]) => {
-  return targets.filter(target => checkTarget(target, patterns)).length;
-};
+const findAllDesigns = memoize((target: string, patterns: string[]): number => {
+  if (target.length === 0) {
+    return 1;
+  }
+
+  const candidates = patterns.filter(pattern => target.startsWith(pattern));
+
+  if (candidates.length === 0) {
+    return 0;
+  }
+
+  return sum(candidates.map(c => findAllDesigns(target.slice(c.length), patterns)));
+}, { cacheKey: args => args.join(',') });
+
+const p1 = (targets: string[], patterns: string[]) => targets.filter(target => findAnyDesigns(target, patterns)).length;
+const p2 = (targets: string[], patterns: string[]) => sum(targets.map(target => findAllDesigns(target, patterns)));
 
 const { patterns, targets } = parseInput();
 
 console.log('P1:', p1(targets, patterns));
+console.log('P2:', p2(targets, patterns));
