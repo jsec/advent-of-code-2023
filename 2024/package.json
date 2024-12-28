@@ -30,6 +30,7 @@
     "mathjs": "^14.0.1",
     "memoize": "^10.0.0",
     "readline-sync": "^1.4.10",
-    "tinyqueue": "^3.0.0"
+    "tinyqueue": "^3.0.0",
+    "yocto-queue": "^1.1.1"
   }
 }
