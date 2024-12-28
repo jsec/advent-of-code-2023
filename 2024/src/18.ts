@@ -9,17 +9,33 @@ import { StringSet } from './utils/string-set.js';
 
 type Node = { distance: number } & Coordinate;
 
-const parseInput = (): Coordinate[] => getSplitInput().map((line) => {
-  const [x, y] = line.split(',').map(Number);
-  return { x: x!, y: y! };
-});
+interface State {
+  byteCount: number;
+  bytes: Coordinate[];
+  matrix: Matrix<boolean>;
+}
 
-const walk = (matrix: Matrix<boolean>, bytes: Coordinate[], byteCount: number) => {
+const setup = (byteCount: number, size: number): State => {
+  const bytes = getSplitInput().map((line) => {
+    const [x, y] = line.split(',').map(Number);
+    return { x: x!, y: y! };
+  });
+
+  const matrix = new Matrix(() => createArray(size, size, false));
+
   for (let i = 0; i < byteCount; i++) {
     const { x, y } = bytes[i]!;
     matrix.set(y, x, true);
   }
 
+  return {
+    byteCount,
+    bytes,
+    matrix,
+  };
+};
+
+const walk = (matrix: Matrix<boolean>) => {
   const paths = new Set<number>();
   const visited = new StringSet<Coordinate>(c => `${c.x}-${c.y}`);
   const queue = new Queue<Node>();
@@ -48,13 +64,22 @@ const walk = (matrix: Matrix<boolean>, bytes: Coordinate[], byteCount: number) =
   return paths;
 };
 
-const p1 = (matrix: Matrix<boolean>, bytes: Coordinate[], byteCount: number) => {
-  const paths = walk(matrix, bytes, byteCount);
+const findFirstBlocker = (state: State) => {
+  const { byteCount, bytes, matrix } = state;
 
-  return Math.min(...paths);
+  for (let i = byteCount; i < bytes.length; i++) {
+    const { x, y } = bytes[i]!;
+    matrix.set(y, x, true);
+
+    const paths = walk(matrix);
+
+    if (paths.size === 0) {
+      return `${x},${y}`;
+    }
+  }
 };
 
-const bytes = parseInput();
-const matrix = new Matrix(() => createArray(71, 71, false));
+const state = setup(1024, 71);
 
-console.log('P1:', p1(matrix, bytes, 1024));
+console.log('P1:', Math.min(...walk(state.matrix)));
+console.log('P2:', findFirstBlocker(state));
