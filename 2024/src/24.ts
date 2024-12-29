@@ -95,6 +95,57 @@ const p1 = (initialState: Wire[], gates: Gate[]) => {
   return Number.parseInt(result, 2);
 };
 
+const p2 = (gates: Gate[]) => {
+  const swaps: string[] = [];
+
+  for (let i = 0; i < 45; i++) {
+    const id = i.toString().padStart(2, '0');
+    const xid = `x${id}`;
+    const yid = `y${id}`;
+    const zid = `z${id}`;
+
+    const xor = gates.find(gate => (
+      (gate.left === xid && gate.right === yid)
+      || (gate.left === yid && gate.right === xid)) && gate.op === 'XOR');
+
+    const and = gates.find(gate => (
+      (gate.left === xid && gate.right === yid)
+      || (gate.left === yid && gate.right === xid)) && gate.op === 'AND');
+
+    const outputGate = gates.find(gate => gate.output === zid);
+
+    if (!xor || !and || !outputGate) {
+      continue;
+    }
+
+    if (outputGate.op !== 'XOR') {
+      swaps.push(outputGate.output);
+    }
+
+    const or = gates.find(gate => gate.left === and.output || gate.right === and.output);
+
+    if (or && or.op !== 'OR' && i > 0) {
+      swaps.push(and.output);
+    }
+
+    const after = gates.find(gate => gate.left === xor.output || gate.right === xor.output);
+
+    if (after?.op === 'OR') {
+      swaps.push(xor.output);
+    }
+  }
+
+  swaps.push(...gates.filter(gate =>
+    !/[xy]/g.test(gate.left![0]!)
+    && !/[xy]/g.test(gate.right![0]!)
+    && !/[z]/g.test(gate.output![0]!)
+    && gate.op === 'XOR')
+    .map(gate => gate.output));
+
+  return swaps.sort().join(',');
+};
+
 const { gates, initialState } = parseInput();
 
 console.log('P1:', p1(initialState, gates));
+console.log('P2:', p2(gates));
