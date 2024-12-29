@@ -21,6 +21,10 @@ export class Matrix<TData> {
     return this._data[x]![y]!;
   }
 
+  equals(c1: Coordinate, c2: Coordinate) {
+    return c1.x === c2.x && c1.y === c2.y;
+  }
+
   find(item: TData): Coordinate {
     for (const [idx, row] of this._data.entries()) {
       if (row.includes(item)) {
